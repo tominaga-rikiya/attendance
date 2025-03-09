@@ -28,7 +28,7 @@ MAIL_FROM_ADDRESSは任意のメールアドレスを入力してください。
 
 
 ## ER図
-![alt]
+![alt](./ER.drawio.png)
 
 ## テストアカウント
 
