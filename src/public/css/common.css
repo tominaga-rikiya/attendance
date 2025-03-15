@@ -44,22 +44,6 @@ header {
     vertical-align: middle;
 }
 
-.header_search {
-    display: flex;
-    height: 100%;
-    padding: 10px 0;
-}
-
-.header_search--input {
-    border: none;
-    padding: 0 20px;
-    width: 25vw;
-}
-
-.header_search--button {
-    display: none;
-}
-
 .header__nav {
     display: flex;
 }
@@ -106,7 +90,7 @@ header {
 .btn {
     display: flex;
     align-items: center;
-    background-color: #ff333f;
+    background-color: black;
     border-radius: 5px;
     color: #fff;
     font-weight: bold;
@@ -120,7 +104,7 @@ header {
     transition: 0.2s;
 }
 
-.btn--big {
+.register-form__btn {
     width: 100%;
     margin-top: 60px;
     font-size: 20px;
@@ -154,6 +138,7 @@ header {
     font-size: 30px;
     text-align: center;
     margin-bottom: 60px;
+
 }
 
 .entry__name {
@@ -169,15 +154,15 @@ header {
     padding: 5px;
 }
 
-.form__error {
+.from__error {
     color: #ff333f;
     margin-top: 8px;
 }
 
-.disable {
+/* .disable {
     color: #666 !important;
     background-color: #CCC !important;
-}
+} */
 
 @media (min-width: 768px) and (max-width: 850px) {
     .header__logo {
