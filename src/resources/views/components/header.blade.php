@@ -5,18 +5,17 @@
     @if( !in_array(Route::currentRouteName(), ['register', 'login', 'verification.notice']) )
         <nav class="header__nav">
             <ul>
-                @if(auth()->user())
-                     <li><a href="/attendance">勤怠</a></li>
-                     <li><a href="/attendances">勤怠一覧</a></li>
-                    <li><a href="/correction-requests">申請</a></li>
+                @if(Auth::check())
                     <li>
-                        <form action="{{ route('logout') }}" method="post">
+                        <form action="/logout" method="post">
                             @csrf
-                            <button type="submit" class="header__logout">ログアウト</button>
+                            <button class="header__logout">ログアウト</button>
                         </form>
                     </li>
+                    <li><a href="/attendance">勤怠</a></li>
                 @else
-                   
+                    <li><a href="/login">勤怠一覧</a></li>
+                    <li><a href="/register">申請</a></li>
                 @endif
             </ul>
         </nav>

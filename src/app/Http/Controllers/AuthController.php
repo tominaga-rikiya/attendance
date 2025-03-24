@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use App\Actions\Fortify\CreateNewUser;
 use App\Http\Requests\EmailVerificationRequest;
 
-
 class AuthController extends Controller
 {
     /**
@@ -81,7 +80,7 @@ class AuthController extends Controller
         auth()->login($user);
 
         // 認証完了後、商品一覧ページへリダイレクト
-        return redirect()->route('attendance.create');
+        return redirect()->route('products.index')->with('success', 'メール認証が完了しました！');
     }
 
     /**
@@ -89,8 +88,12 @@ class AuthController extends Controller
      */
     public function verifyRedirect()
     {
-        return redirect()->away('http://localhost:8025')
-           ->with('info', 'メールボックスを確認してください。');
+        return redirect()->away('https://mailtrap.io')
+            ->with('info', 'メールボックスを確認してください。');
+
+        // mailhogを使用する場合は以下のように変更
+        // return redirect()->away('http://localhost:8025')
+        //    ->with('info', 'メールボックスを確認してください。');
     }
 
     /**
@@ -98,25 +101,10 @@ class AuthController extends Controller
      */
     public function checkEmailVerification(Request $request)
     {
-        if (!$request->user()) {
-            return redirect()->route('login');
-        }
-
         if (!$request->user()->hasVerifiedEmail()) {
             return redirect()->route('verification.notice');
         }
 
-        return redirect()->intended(route('attendance.create'));
-    }
-
-    public function logout(Request $request)
-    {
-        auth()->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/login');
+        return redirect()->route('attendance.create');
     }
 }
-

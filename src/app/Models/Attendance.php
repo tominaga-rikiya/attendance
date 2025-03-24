@@ -19,14 +19,9 @@ class Attendance extends Model
 
     protected $casts = [
         'date' => 'date',
-        'start_time' => 'datetime',
-        'end_time' => 'datetime'
+        'start_time' => 'time',
+        'end_time' => 'time'
     ];
-
-    const STATUS_NOT_STARTED = 'not_started';
-    const STATUS_WORKING = 'working';
-    const STATUS_ON_BREAK = 'on_break';
-    const STATUS_FINISHED = 'finished';
 
     public function user()
     {

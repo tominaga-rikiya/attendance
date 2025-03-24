@@ -19,7 +19,7 @@
                 {{ $message }}
             @enderror
         </div>
-         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        
         <label for="password" class="entry__name">パスワード</label>
         <input name="password" id="password" type="password" class="input">
         <div class="form__error">
@@ -27,7 +27,7 @@
                 {{ $message }}
             @enderror
         </div>
-       
+        
         <button class="auth-form__btn btn">ログインする</button>
         <a href="/register" class="link">会員登録はこちら</a>
     </form>

@@ -1,12 +1,10 @@
 <?php
 
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
-use App\Models\Attendance;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
-use const Dom\INDEX_SIZE_ERR;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +23,11 @@ Route::get('/register', function () {
 
 
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/register', [AuthController::class, 'store']);
 
 
 // 認証関連のルート
-Route::controller(AuthController::class)->group(function ()
- {
+Route::controller(AuthController::class)->group(function () {
     // メール認証関連
     Route::get('/email/verify', 'showVerifyNotice')->name('verification.notice');
     Route::post('/email/verification-notification', 'resendVerificationEmail')->name('verification.send');
@@ -40,28 +38,20 @@ Route::controller(AuthController::class)->group(function ()
     Route::post('/register', 'store')->name('register');
 
     // 認証確認
-    Route::get('/check-email-verification', 'checkEmailVerification')
-    ->middleware(['auth'])
-    ->name('verification.check');
+    Route::get('/check-email-verification', 'checkEmailVerification')->name('verification.check');
 });
 
 // 認証済みユーザー用ルート
 Route::middleware(['auth', 'verified'])->group(function () {
-    // 勤怠入力画面
+    // 商品一覧画面
     Route::get('/attendance', function () {
         return view('attendance.create');
-    })->name('attendance.create');
+    })->name('products.index');
+
+    // その他の認証が必要なルート...
 });
 
 // ログイン画面表示用のGETルート
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    ->name('login');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/attendance', [AttendanceController::class, 'create'])->name('attendance.create');
-    Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clock-in');
-    Route::post('/attendance/break-start', [AttendanceController::class, 'breakStart'])->name('attendance.break-start');
-    Route::post('/attendance/break-end', [AttendanceController::class, 'breakEnd'])->name('attendance.break-end');
-    Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clock-out');
-});
