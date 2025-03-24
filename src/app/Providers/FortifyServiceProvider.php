@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\LoginResponse; // この行を追加
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 
@@ -17,10 +18,7 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-     
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
@@ -43,5 +41,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         app()->bind(FortifyLoginRequest::class, LoginRequest::class);
+
+        
     }
 }
