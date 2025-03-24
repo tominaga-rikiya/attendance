@@ -37,7 +37,7 @@
             @enderror
         </div>
         
-        <label for="password_confirm" class="entry__name">確認用パスワード</label>
+        <label for="password_confirm" class="entry__name">パスワード確認</label>
         <input name="password_confirmation" id="password_confirm" type="password" class="input">
         <div class="form__error">
             @error('password_confirmation')
