@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AttendanceRevisionRequest;
 use App\Models\Attendance;
 use App\Models\BreakTime;
+use App\Models\RevisionRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 
 class AttendanceController extends Controller
 {
@@ -35,11 +37,15 @@ class AttendanceController extends Controller
     /**
      * 出勤処理
      */
-    public function clockIn(AttendanceRevisionRequest $request)
+    public function clockIn(Request $request)
     {
         $user = auth()->user();
         $today = Carbon::now()->toDateString();
-        $now = Carbon::now();
+
+        // 秒を切り捨てた現在時刻を使用
+        $now = Carbon::now()->format('Y-m-d H:i:00');
+        $now = Carbon::parse($now);
+
 
         // 今日の勤怠記録を確認
         $attendance = Attendance::where('user_id', $user->id)
@@ -68,11 +74,15 @@ class AttendanceController extends Controller
     /**
      * 休憩開始処理
      */
-    public function breakStart(AttendanceRevisionRequest $request)
+    public function breakStart(Request $request)
     {
         $user = auth()->user();
         $today = Carbon::now()->toDateString();
-        $now = Carbon::now();
+
+        // 秒を切り捨てた現在時刻を使用
+        $now = Carbon::now()->format('Y-m-d H:i:00');
+        $now = Carbon::parse($now);
+
 
         // 今日の勤怠記録を確認
         $attendance = Attendance::where('user_id', $user->id)
@@ -82,7 +92,7 @@ class AttendanceController extends Controller
         // 休憩記録を作成
         $break = new BreakTime([
             'attendance_id' => $attendance->id,
-            'break_start' => $now
+            'start_time' => $now
         ]);
         $break->save();
 
@@ -96,11 +106,14 @@ class AttendanceController extends Controller
     /**
      * 休憩終了処理
      */
-    public function breakEnd(AttendanceRevisionRequest $request)
+    public function breakEnd(Request $request)
     {
         $user = auth()->user();
         $today = Carbon::now()->toDateString();
-        $now = Carbon::now();
+        // 秒を切り捨てた現在時刻を使用
+        $now = Carbon::now()->format('Y-m-d H:i:00');
+        $now = Carbon::parse($now);
+
 
         // 今日の勤怠記録を確認
         $attendance = Attendance::where('user_id', $user->id)
@@ -128,11 +141,14 @@ class AttendanceController extends Controller
     /**
      * 退勤処理
      */
-    public function clockOut(AttendanceRevisionRequest $request)
+    public function clockOut(Request $request)
     {
         $user = auth()->user();
         $today = Carbon::now()->toDateString();
-        $now = Carbon::now();
+        // 秒を切り捨てた現在時刻を使用
+        $now = Carbon::now()->format('Y-m-d H:i:00');
+        $now = Carbon::parse($now);
+
 
         // 今日の勤怠記録を確認
         $attendance = Attendance::where('user_id', $user->id)
@@ -146,5 +162,187 @@ class AttendanceController extends Controller
 
         return redirect()->route('attendance.create')
             ->with('success', 'お疲れ様でした。');
+    }
+    /**
+     * 勤怠一覧表示
+     */
+    public function index(Request $request)
+    {
+        $user = auth()->user();
+        $searchMonth = $request->input('month', date('Y-m'));
+        $startDate = $searchMonth . '-01';
+        $endDate = date('Y-m-t', strtotime($startDate));
+        $today = Carbon::now()->format('Y-m-d');
+
+        // 現在の月かどうかをチェック
+        $isCurrentMonth = (date('Y-m', strtotime($startDate)) === date('Y-m'));
+
+        // 現在の月の場合は今日までの日付のみを生成
+        if ($isCurrentMonth) {
+            $endDateForPeriod = $today;
+        } else {
+            // 過去の月の場合は月末まで
+            $endDateForPeriod = $endDate;
+        }
+
+        // 月の全日付を生成
+        $period = new \DatePeriod(
+            new \DateTime($startDate),
+            new \DateInterval('P1D'),
+            new \DateTime($endDateForPeriod . ' 23:59:59')
+        );
+
+        // 日付をキーとした配列を初期化
+        $datesArray = [];
+        foreach ($period as $date) {
+            $dateString = $date->format('Y-m-d');
+            $datesArray[$dateString] = null;
+        }
+
+        // 勤怠データを取得
+        $attendances = Attendance::with('breakTimes')
+            ->where('user_id', $user->id)
+            ->whereBetween('date', [$startDate, $endDateForPeriod])
+            ->get();
+
+        // 勤怠データを日付配列にマッピング
+        foreach ($attendances as $attendance) {
+            // dateがCarbonオブジェクトの場合は文字列に変換
+            $dateKey = $attendance->date instanceof \Carbon\Carbon
+                ? $attendance->date->format('Y-m-d')
+                : $attendance->date;
+
+            $datesArray[$dateKey] = $attendance;
+        }
+        return view('attendance.index', [
+            'datesArray' => $datesArray,
+            'searchMonth' => $searchMonth,
+            'isCurrentMonth' => $isCurrentMonth
+        ]);
+    }
+    /**
+     * 勤怠詳細表示
+     */
+    public function show($id)
+    {
+        $attendance = Attendance::with('breakTimes')
+            ->where('user_id', auth()->id())
+            ->findOrFail($id);
+
+        // 承認待ちの申請があるか確認
+        $pendingRevision = RevisionRequest::where('attendance_id', $attendance->id)
+            ->where('status', 'pending')
+            ->first();
+
+        return view('attendance.show', compact('attendance', 'pendingRevision'));
+    }
+
+    public function update(AttendanceRevisionRequest $request, $id)
+{
+    // バリデーションはAttendanceRevisionRequestで処理済み
+    
+    $attendance = Attendance::findOrFail($id);
+    
+    // ユーザーが編集権限を持っているか確認
+    if ($attendance->user_id !== auth()->id()) {
+        return redirect()->back()->with('error', '権限がありません');
+    }
+    
+    // 承認待ちの修正リクエストがある場合はリダイレクト
+    if ($attendance->hasPendingRevision()) {
+        return redirect()->back()->with('error', '承認待ちの修正リクエストがあります');
+    }
+    
+    // 修正リクエストの作成
+    $revision = new RevisionRequest();
+    $revision->user_id = auth()->id(); // user_idを追加
+    $revision->old_start_time = $attendance->start_time; // 元の値も保存
+    $revision->old_end_time = $attendance->end_time; // 元の値も保存
+    $revision->attendance_id = $attendance->id;
+    $revision->new_start_time = $request->start_time;
+    $revision->new_end_time = $request->end_time;
+    $revision->note = $request->note;
+    $revision->status = 'pending';
+    $revision->save();   
+    
+        // 休憩時間の保存
+        if ($request->has('breaks')) {
+            foreach ($request->breaks as $breakData) {
+                if (!empty($breakData['start_time']) && !empty($breakData['end_time'])) {
+                    BreakTime::create([
+                        'attendance_id' => $attendance->id,  // 修正: revision_id → attendance_id
+                        'start_time' => $breakData['start_time'],
+                        'end_time' => $breakData['end_time']
+                    ]);
+                }
+            }
+        }
+    
+    return redirect()->route('attendance.show', $id)->with('success', '修正リクエストを送信しました');
+}
+   
+    /**
+     * 勤怠修正申請一覧表示
+     */
+    public function correctionIndex()
+    {
+        // 自分が行った申請のうち、管理者が承認していないものを取得
+        $pendingRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())  // テーブル名を明示
+            ->where('revision_requests.status', 'pending')  // テーブル名を明示
+            ->with(['attendance', 'user'])
+            ->join('attendances', 'revision_requests.attendance_id', '=', 'attendances.id')
+            ->orderBy('attendances.date', 'asc')
+            ->select('revision_requests.*')
+            ->get();
+
+        // 自分が行った申請のうち、承認済みのものを取得
+        $approvedRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())  // テーブル名を明示
+            ->where('revision_requests.status', 'approved')  // テーブル名を明示
+            ->with(['attendance', 'user'])
+            ->join('attendances', 'revision_requests.attendance_id', '=', 'attendances.id')
+            ->orderBy('attendances.date', 'asc')
+            ->select('revision_requests.*')
+            ->get();
+
+        return view('attendance.correction_index', compact('pendingRequests', 'approvedRequests'));
+    }
+
+    // 管理者用の承認機能
+    public function approve($id)
+    {
+        // 管理者権限チェック
+        if (!auth()->user()->isAdmin()) {
+            return redirect()->back()->with('error', '権限がありません');
+        }
+
+        $request = RevisionRequest::findOrFail($id);
+        $request->status = 'approved';
+        $request->approved_at = now();
+        $request->save();
+
+        // 元の勤怠データを更新
+        $attendance = $request->attendance;
+        $attendance->start_time = $request->new_start_time;
+        $attendance->end_time = $request->new_end_time;
+        $attendance->save();
+
+        // 休憩時間の更新処理（必要に応じて実装）
+
+        return redirect()->back()->with('success', '申請を承認しました');
+    }
+
+    /**
+     * 勤怠修正申請詳細表示
+     */
+    public function correctionShow($id)
+    {
+        $revision = RevisionRequest::with(['attendance', 'user'])->findOrFail($id);
+
+        // 自分の申請または管理者のみアクセス可能
+        if ($revision->user_id != auth()->id() && !auth()->user()->isAdmin()) {
+            return redirect()->route('attendance.correction')->with('error', '権限がありません');
+        }
+
+        return view('attendance.correction_show', compact('revision'));
     }
 }

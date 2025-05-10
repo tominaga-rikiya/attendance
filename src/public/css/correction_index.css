@@ -1,0 +1,155 @@
+/* タイトル */ 
+.date-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.with-vertical-line {
+    border-left: 4px solid #333;
+    padding-left: 10px;
+    margin-left: 0;
+    color: #000000;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.date-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+body {
+    background-color: #F0EFF2;
+    font-weight: bold;
+}
+
+.container {
+    width: 95%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* タブヘッダーのスタイル */
+.tab-header {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-link {
+    padding: 10px 30px;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+    font-weight:400;
+}
+
+/* アクティブなタブのスタイル */
+.tab-link.active {
+    font-weight: bold;
+    color: #000; /* アクティブタブは黒色で表示 */
+    padding-bottom: 8px; /* 下線の位置調整 */
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* テーブルスタイル - Figmaデザインに合わせる */
+.list-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 10px; /* テーブル全体に丸みを追加 */
+    overflow: hidden; /* 丸みをきれいに表示するため */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* 微妙な影を追加 */
+}
+
+/* テーブルのヘッダー */
+.list-table th {
+    background-color: #f8f8f8; /* 薄いグレー背景 */
+    font-weight: normal;
+    color: #737373;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee; /* 下線のみ */
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-weight: bold;
+}
+
+/* テーブルのセル */
+.list-table td {
+    padding: 15px 10px;
+    text-align: center;
+    color: #737373;
+    border-bottom: 1px solid #eee; /* 下線のみ */
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+/* データなしメッセージ */
+.no-data {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+}
+
+/* 詳細ボタンのスタイル */
+.detail-btn {
+    display: inline-block;
+    color: #333;
+    padding: 5px 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* 承認ボタンのスタイル */
+.approve-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.approve-btn:hover {
+    background-color: #45a049;
+}
+
+/* シンプルな長文対策 */
+.reason-cell {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ホバー時に全文表示 */
+.reason-cell:hover {
+    white-space: normal;
+    overflow: visible;
+    position: relative;
+    z-index: 10;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    padding: 5px;
+}
