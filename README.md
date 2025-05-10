@@ -31,7 +31,22 @@ MAIL_FROM_ADDRESSは任意のメールアドレスを入力してください。
 ![alt](./ER.drawio.png)
 
 ## テストアカウント
+管理者ユーザ 
+name: admin
+email: admin@example.com 
+password: password  
+-------------------------
+一般ユーザ
+name: 西 怜奈
+email:reina@coachtech.com  
+password: password  
 
+一般ユーザ
+name: 増田 一世
+email:issei@coachtech.com
+password: password 
+
+-------------------------
 
 ## PHPUnitを利用したテストに関して
 以下のコマンド:  
