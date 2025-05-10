@@ -1,4 +1,3 @@
-/* タイトル */ 
 .date-navigation {
     display: flex;
     justify-content: space-between;
@@ -37,7 +36,7 @@ body {
     padding: 10px;
 }
 
-/* タブヘッダーのスタイル */
+
 .tab-header {
     display: flex;
     margin-bottom: 20px;
@@ -53,12 +52,10 @@ body {
     font-weight:400;
 }
 
-/* アクティブなタブのスタイル */
 .tab-link.active {
     font-weight: bold;
-    color: #000; /* アクティブタブは黒色で表示 */
-    padding-bottom: 8px; /* 下線の位置調整 */
-}
+    color: #000; 
+    padding-bottom: 8px; 
 
 .tab-content {
     display: none;
@@ -68,50 +65,47 @@ body {
     display: block;
 }
 
-/* テーブルスタイル - Figmaデザインに合わせる */
 .list-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
     background-color: #fff;
-    border-radius: 10px; /* テーブル全体に丸みを追加 */
-    overflow: hidden; /* 丸みをきれいに表示するため */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* 微妙な影を追加 */
-}
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
 
-/* テーブルのヘッダー */
+
 .list-table th {
-    background-color: #f8f8f8; /* 薄いグレー背景 */
+    background-color: #f8f8f8; 
     font-weight: normal;
     color: #737373;
     padding: 10px;
     text-align: center;
-    border-bottom: 1px solid #eee; /* 下線のみ */
+    border-bottom: 1px solid #eee; 
     border-top: none;
     border-left: none;
     border-right: none;
     font-weight: bold;
 }
 
-/* テーブルのセル */
 .list-table td {
     padding: 15px 10px;
     text-align: center;
     color: #737373;
-    border-bottom: 1px solid #eee; /* 下線のみ */
+    border-bottom: 1px solid #eee; 
     border-top: none;
     border-left: none;
     border-right: none;
 }
 
-/* データなしメッセージ */
+
 .no-data {
     text-align: center;
     color: #888;
     padding: 20px;
 }
 
-/* 詳細ボタンのスタイル */
+
 .detail-btn {
     display: inline-block;
     color: #333;
@@ -120,7 +114,7 @@ body {
     font-weight: bold;
 }
 
-/* 承認ボタンのスタイル */
+
 .approve-btn {
     background-color: #4CAF50;
     color: white;
@@ -135,7 +129,6 @@ body {
     background-color: #45a049;
 }
 
-/* シンプルな長文対策 */
 .reason-cell {
     max-width: 150px;
     white-space: nowrap;
@@ -143,7 +136,6 @@ body {
     text-overflow: ellipsis;
 }
 
-/* ホバー時に全文表示 */
 .reason-cell:hover {
     white-space: normal;
     overflow: visible;

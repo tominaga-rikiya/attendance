@@ -27,7 +27,7 @@ class BreakTime extends Model
     }
 
     /**
-     * 開始時間を時間:分の形式で取得
+     * 開始時間を時間:分
      */
     public function getTimeOnlyStartTimeAttribute()
     {
@@ -39,7 +39,7 @@ class BreakTime extends Model
     }
 
     /**
-     * 終了時間を時間:分の形式で取得
+     * 終了時間を時間:分
      */
     public function getTimeOnlyEndTimeAttribute()
     {
@@ -51,7 +51,7 @@ class BreakTime extends Model
     }
 
     /**
-     * この休憩の時間を分で計算（秒は切り捨て）
+     * この休憩の時間を分
      */
     public function getDurationMinutesAttribute()
     {
@@ -59,14 +59,12 @@ class BreakTime extends Model
             return 0;
         }
 
-        // 秒を切り捨てるため、時と分だけの文字列に変換してから再度Carbonオブジェクトに変換
         $start = Carbon::parse($this->start_time)->format('Y-m-d H:i');
         $start = Carbon::parse($start);
 
         $end = Carbon::parse($this->end_time)->format('Y-m-d H:i');
         $end = Carbon::parse($end);
 
-        // 分単位の差分を計算
         return $end->diffInMinutes($start);
     }
 }

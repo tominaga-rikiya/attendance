@@ -76,18 +76,13 @@ Route::get('/correction-requests', [AdminAttendanceController::class, 'indexCorr
     Route::get('/correction-requests/{id}', [AdminAttendanceController::class, 'showCorrectionRequest'])
         ->name('admin.correction-requests.show');
         
+        // 修正申請承認画面
+    Route::get('/correction-requests/{id}/approve', [AdminAttendanceController::class, 'showApproveCorrectionRequest'])
+        ->name('admin.correction-requests.approve');
 
-    
-        // 修正申請承認画面の表示（GETメソッド）
-        Route::get('/correction-requests/{id}/approve', [AdminAttendanceController::class, 'showApproveCorrectionRequest'])
-            ->name('admin.correction-requests.approve');
-
-        // 修正申請承認の処理（POSTメソッド）
-        Route::post('/correction-requests/{id}/approve', [AdminAttendanceController::class, 'approveCorrectionRequest'])
-            ->name('admin.correction-requests.approve.post');
-
-       
-
+        // 修正申請承認の処理
+     Route::post('/correction-requests/{id}/approve', [AdminAttendanceController::class, 'approveCorrectionRequest'])
+        ->name('admin.correction-requests.approve.post');
 
     // 勤怠管理
     Route::get('/attendances', [AdminAttendanceController::class, 'index'])

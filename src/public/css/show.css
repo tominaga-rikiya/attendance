@@ -1,4 +1,3 @@
-/* 全体のレイアウト */
 .container {
     display: flex;
     flex-direction: column;
@@ -7,7 +6,6 @@
     margin-top: 40px;
 }
 
-/* タイトル部分 */
 .with-vertical-line {
     border-left: 4px solid #333;
     padding-left: 10px;
@@ -26,7 +24,6 @@
     text-align: left;
 }
 
-/* フォームコンテナ */
 .form-container {
     width: 100%;
     max-width: 900px;
@@ -36,10 +33,8 @@
     padding: 40px;
     margin-top: 0;
     font-weight: bold;
-    
 }
 
-/* フォームグループの基本スタイル */
 .form-group {
     display: flex;
     flex-wrap: wrap;
@@ -49,14 +44,12 @@
     position: relative;
 }
 
-/* ラベル */
 .form-group label {
     flex: 0 0 200px;
     font-weight: bold;
     color: #737373;
 }
 
-/* 入力ラッパー */
 .form-group .input-wrapper {
     flex: 1 0 calc(100% - 250px);
     display: flex;
@@ -64,7 +57,6 @@
     margin-left: 50px;
 }
 
-/* 入力フィールド共通スタイル */
 .form-group input,
 .readonly-box,
 .break-time-row input {
@@ -74,7 +66,6 @@
     margin-bottom: 5px;
 }
 
-/* テキスト入力フィールド */
 .form-group input {
     width: 300px;
     border: 1px solid #E1E1E1;
@@ -82,25 +73,21 @@
     text-align: center;
 }
 
-/* 時間入力フィールド */
 .form-group input[name="start_time"],
 .form-group input[name="end_time"],
 .break-time-row input {
     width: 100px;
 }
 
-/* 備考欄 */
 .form-group input[name="note"] {
     height: 60px;
     text-align: left;
 }
 
-/* 読み取り専用ボックス */
 .readonly-box {
     margin-left: 0;
 }
 
-/* 時間の区切り文字 */
 .time-separator {
     margin: 0 20px;
     padding: 0 30px;
@@ -109,7 +96,6 @@
     font-size: 16px;
 }
 
-/* 休憩時間関連 */
 .break-times-container {
     width: 100%;
     display: flex;
@@ -139,7 +125,6 @@
     display: block;
 }
 
-/* エラーメッセージ */
 .error-message {
     color: #ff0000;
     font-size: 0.9em;
@@ -151,7 +136,6 @@
     text-align: left;
 }
 
-/* 警告メッセージ */
 .alert.warning {
     color: #856404;
     border-radius: 4px;
@@ -162,7 +146,6 @@
     text-align: right;
 }
 
-/* ボタン関連 */
 .button-container {
     width: 100%;
     max-width: 900px;
@@ -187,7 +170,6 @@
     background-color: #333;
 }
 
-/* タブレット対応（768px〜850px） */
 @media (min-width: 769px) and (max-width: 850px) {
     .container {
         padding: 15px;
@@ -221,8 +203,3 @@
         padding: 0 15px;
     }
 }
-
-
-
-
-

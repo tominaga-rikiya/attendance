@@ -286,18 +286,18 @@ class AttendanceController extends Controller
      */
     public function correctionIndex()
     {
-        // 自分が行った申請のうち、管理者が承認していないものを取得
-        $pendingRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())  // テーブル名を明示
-            ->where('revision_requests.status', 'pending')  // テーブル名を明示
+        // 自分が行った申請のうち、管理者が承認していないもの
+        $pendingRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())
+            ->where('revision_requests.status', 'pending')  
             ->with(['attendance', 'user'])
             ->join('attendances', 'revision_requests.attendance_id', '=', 'attendances.id')
             ->orderBy('attendances.date', 'asc')
             ->select('revision_requests.*')
             ->get();
 
-        // 自分が行った申請のうち、承認済みのものを取得
-        $approvedRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())  // テーブル名を明示
-            ->where('revision_requests.status', 'approved')  // テーブル名を明示
+        // 自分が行った申請のうち、承認済みのもの
+        $approvedRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())  
+            ->where('revision_requests.status', 'approved')  
             ->with(['attendance', 'user'])
             ->join('attendances', 'revision_requests.attendance_id', '=', 'attendances.id')
             ->orderBy('attendances.date', 'asc')
@@ -310,23 +310,15 @@ class AttendanceController extends Controller
     // 管理者用の承認機能
     public function approve($id)
     {
-        // 管理者権限チェック
-        if (!auth()->user()->isAdmin()) {
-            return redirect()->back()->with('error', '権限がありません');
-        }
-
         $request = RevisionRequest::findOrFail($id);
         $request->status = 'approved';
         $request->approved_at = now();
         $request->save();
 
-        // 元の勤怠データを更新
         $attendance = $request->attendance;
         $attendance->start_time = $request->new_start_time;
         $attendance->end_time = $request->new_end_time;
         $attendance->save();
-
-        // 休憩時間の更新処理（必要に応じて実装）
 
         return redirect()->back()->with('success', '申請を承認しました');
     }
@@ -338,7 +330,6 @@ class AttendanceController extends Controller
     {
         $revision = RevisionRequest::with(['attendance', 'user'])->findOrFail($id);
 
-        // 自分の申請または管理者のみアクセス可能
         if ($revision->user_id != auth()->id() && !auth()->user()->isAdmin()) {
             return redirect()->route('attendance.correction')->with('error', '権限がありません');
         }

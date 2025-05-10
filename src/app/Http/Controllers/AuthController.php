@@ -17,13 +17,10 @@ class AuthController extends Controller
      */
     public function store(Request $request, CreateNewUser $creator)
     {
-        // CreateNewUser クラスを使用してユーザーを作成（バリデーション含む）
         $user = $creator->create($request->all());
 
-        // 登録イベントを発火してメール送信をトリガー
         event(new Registered($user));
 
-        // 未認証ユーザーをセッションに保存
         session()->put('unauthenticated_user', $user);
 
         return redirect()->route('verification.notice');
@@ -60,27 +57,22 @@ class AuthController extends Controller
      */
     public function verifyEmail(Request $request, $id, $hash)
     {
-        // ユーザーを取得
+     
         $user = User::findOrFail($id);
 
-        // ハッシュが一致するか確認
         if (!hash_equals(sha1($user->getEmailForVerification()), $hash)) {
             abort(403, 'Invalid verification link');
         }
 
-        // すでに認証済みでなければ認証済みにする
         if (!$user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
             event(new Verified($user));
         }
 
-        // セッションのクリーンアップ
         session()->forget('unauthenticated_user');
 
-        // ユーザーをログインさせる
         auth()->login($user);
 
-        // 認証完了後、商品一覧ページへリダイレクト
         return redirect()->route('attendance.create');
     }
 

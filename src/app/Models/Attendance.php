@@ -22,7 +22,7 @@ class Attendance extends Model
     ];
 
     protected $casts = [
-        'date' => 'date',  // これを追加
+        'date' => 'date',  
     ];
 
     /**
@@ -54,7 +54,7 @@ class Attendance extends Model
     }
 
     /**
-     * 出勤時間を時間:分の形式で取得
+     * 出勤時間を時間:分
      */
     public function getTimeOnlyStartTimeAttribute()
     {
@@ -66,7 +66,7 @@ class Attendance extends Model
     }
 
     /**
-     * 退勤時間を時間:分の形式で取得
+     * 退勤時間を時間:分
      */
     public function getTimeOnlyEndTimeAttribute()
     {
@@ -78,7 +78,7 @@ class Attendance extends Model
     }
 
     /**
-     * 日付をフォーマットして取得
+     * 日付をフォーマット
      */
     public function getFormattedDateAttribute()
     {
@@ -86,7 +86,7 @@ class Attendance extends Model
     }
 
     /**
-     * 休憩時間の合計を時間:分形式で取得
+     * 休憩時間の合計を時間:分
      */
     public function getFormattedBreakTimeAttribute()
     {
@@ -99,7 +99,7 @@ class Attendance extends Model
     }
 
     /**
-     * 日付を「MM/DD（曜日）」形式で取得
+     * 日付を「MM/DD（曜日）」形式
      */
     public function getFormattedDateWithDayAttribute()
     {
@@ -114,7 +114,7 @@ class Attendance extends Model
     }
 
     /**
-     * 実労働時間を時間:分形式で取得
+     * 実労働時間を時間:分
      */
     public function getFormattedWorkTimeAttribute()
     {
@@ -122,20 +122,16 @@ class Attendance extends Model
             return null;
         }
 
-        // 秒を切り捨てる
         $startTime = Carbon::parse($this->start_time)->format('Y-m-d H:i');
         $startTime = Carbon::parse($startTime);
 
         $endTime = Carbon::parse($this->end_time)->format('Y-m-d H:i');
         $endTime = Carbon::parse($endTime);
 
-        // 総勤務時間（分）
         $totalMinutes = $endTime->diffInMinutes($startTime);
 
-        // 休憩時間の合計（分）
         $breakMinutes = $this->total_break_minutes;
 
-        // 実労働時間（分）
         $workMinutes = max(0, $totalMinutes - $breakMinutes);
 
         $hours = floor($workMinutes / 60);
@@ -145,7 +141,7 @@ class Attendance extends Model
     }
 
     /**
-     * 休憩時間の合計（分）を取得（アクセサ）- 同一時刻の休憩を除外
+     * 休憩時間の合計:分
      */
     public function getTotalBreakMinutesAttribute()
     {
