@@ -1,0 +1,311 @@
+body {
+    background-color: #F0EFF2;
+    color: #737373;
+    font-weight: bold;
+}
+
+/* コンテナ */
+.container {
+    width: 95%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* タイトル */
+.date-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.with-vertical-line {
+       border-left: 4px solid #333;
+        padding-left: 10px;
+        margin-left: 0;
+        color: #000000;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        margin-top: 5px;
+}
+
+.date-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* 検索カード */
+.search-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-card-body {
+    padding: 10px;
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+}
+
+/* 月選択部分 */
+.date-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.date-display span {
+    min-width: 70px;
+    text-align: center;
+}
+
+.calendar-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+.calendar-icon i {
+    font-size: 16px;
+}
+
+.calendar-icon::before {
+    content: "\1F4C5";
+    font-size: 16px;
+}
+
+.hidden {
+    display: none;
+}
+
+.btn-navigation,
+.btn-primary {
+    color: #333;
+    text-decoration: none;
+    padding: 6px 12px;
+    background: transparent;
+    border: none;
+}
+
+.btn-navigation:hover,
+.btn-primary:hover {
+    text-decoration: underline;
+}
+
+/* テーブルカード */
+.table-card {
+    background: #fff;
+    border: 1px solid #e0e0e8;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+/* データテーブル */
+.data-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.data-table th,
+.data-table td {
+    padding: 8px 5px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e8;
+    font-size: 14px;
+    color: #737373;
+  
+}
+
+.data-table th {
+    background: #f8f8f8;
+    padding: 10px 5px;
+    font-weight: bold;
+}
+
+.data-table tr {
+    height: 40px;
+}
+
+/* 最初の行の上枠を追加 */
+.data-table thead tr:first-child th {
+    border-top: 1px solid #e0e0e8;
+}
+
+/* 最初のセルと最後のセルの左右の枠線 */
+.data-table th:first-child,
+.data-table td:first-child {
+    border-left: 1px solid #e0e0e8;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+    border-right: 1px solid #e0e0e8;
+}
+
+/* テーブルの最初と最後の行の角丸 */
+.data-table thead tr:first-child th:first-child {
+    border-top-left-radius: 6px;
+}
+
+.data-table thead tr:first-child th:last-child {
+    border-top-right-radius: 6px;
+}
+
+.data-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 6px;
+}
+
+.data-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 6px;
+}
+
+/* 選択行と行ホバーのスタイル */
+.selected-row {
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.data-table tbody tr:hover {
+    background-color: rgba(240, 240, 245, 0.5);
+}
+
+/* 列の幅設定 */
+.data-table th:nth-child(1),
+.data-table td:nth-child(1) {
+    width: 7%;
+}
+
+.data-table th:nth-child(2),
+.data-table td:nth-child(2) {
+    width: 5%;
+}
+
+.data-table th:nth-child(3),
+.data-table td:nth-child(3),
+.data-table th:nth-child(4),
+.data-table td:nth-child(4),
+.data-table th:nth-child(5),
+.data-table td:nth-child(5),
+.data-table th:nth-child(6),
+.data-table td:nth-child(6) {
+    width: 10%;
+}
+
+.data-table th:nth-child(7),
+.data-table td:nth-child(7) {
+    width: 15%;
+}
+
+.data-table th:nth-child(8),
+.data-table td:nth-child(8) {
+    width: 7%;
+}
+
+/* ボタンスタイル */
+.btn-outline {
+    display: inline-block;
+    padding: 4px 12px;
+    background: transparent;
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-outline:hover,
+.btn-detail:hover {
+    text-decoration: underline;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* レスポンシブ対応 */
+@media screen and (max-width: 850px) and (min-width: 768px) {
+    body {
+        padding: 0;
+    }
+
+    .container,
+    .table-card,
+    .search-card {
+        width: 740px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .data-table {
+        width: 100%;
+    }
+
+    /* セルの幅を調整 */
+    .data-table th:nth-child(1),
+    .data-table td:nth-child(1) {
+        width: 15%;
+    }
+
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2),
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3),
+    .data-table th:nth-child(4),
+    .data-table td:nth-child(4),
+    .data-table th:nth-child(5),
+    .data-table td:nth-child(5) {
+        width: 14%;
+    }
+
+    .data-table th:nth-child(6),
+    .data-table td:nth-child(6) {
+        width: 10%;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 12px 5px;
+        font-size: 13px;
+    }
+}

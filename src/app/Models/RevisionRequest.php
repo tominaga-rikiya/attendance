@@ -12,8 +12,21 @@ class RevisionRequest extends Model
     protected $fillable = [
         'user_id',
         'attendance_id',
-        'status',
+        'old_start_time',
+        'new_start_time',
+        'old_end_time',
+        'new_end_time',
+        'break_modifications',
         'note',
+        'status'
+    ];
+
+    protected $casts = [
+        'break_modifications' => 'json',
+        'old_start_time' => 'datetime',
+        'new_start_time' => 'datetime',
+        'old_end_time' => 'datetime',
+        'new_end_time' => 'datetime'
     ];
 
     public function user()

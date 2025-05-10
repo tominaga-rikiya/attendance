@@ -1,19 +1,20 @@
 @extends('layouts.app')
 
-@section('title','管理者申請一覧')
+@section('title','申請一覧')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('/css/correction_index.css') }}">
 @endsection
 
 @section('content')
-@include('components.admin_header')
+@include('components.header')
 <div class="container">
-    <div class="date-navigation">
+   <div class="date-navigation">
         <div class="date-title">
             <h2 class="with-vertical-line">申請一覧</h2>
         </div>
     </div>
+    
 
     <div class="tab-header">
         <a href="#" class="tab-link active" data-tab="pending">承認待ち</a>
@@ -30,6 +31,9 @@
                     <th>申請理由</th>
                     <th>申請日時</th>
                     <th>詳細</th>
+                    @if(auth()->user()->isAdmin())
+                    <th>操作</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -37,13 +41,7 @@
                 <tr>
                     <td>承認待ち</td>
                     <td>{{ $request->user->name }}</td>
-                    <td>
-                        @if($request->attendance)
-                            {{ $request->attendance->formatted_date }}
-                        @else
-                            -
-                        @endif
-                    </td>
+                    <td>{{ \Carbon\Carbon::parse($request->attendance->date)->format('Y/m/d') }}</td>
                     <td class="reason-cell">{{ $request->note }}</td>
                     <td>
                         @if($request->created_at)
@@ -55,12 +53,20 @@
                         @endif
                     </td>
                     <td>
-                      <a href="{{ route('admin.correction-requests.show', $request->id) }}" class="detail-btn">詳細</a>
+                       <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-btn">詳細</a>
                     </td>
+                    @if(auth()->user()->isAdmin())
+                    <td>
+                        <form action="{{ route('revision.approve', $request->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="approve-btn">承認する</button>
+                        </form>
+                    </td>
+                    @endif
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="no-data">承認待ちの申請はありません</td>
+                    <td colspan="{{ auth()->user()->isAdmin() ? 7 : 6 }}" class="no-data">承認待ちの申請はありません</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -75,7 +81,7 @@
                     <th>名前</th>
                     <th>対象日時</th>
                     <th>申請理由</th>
-                    <th>申請日時</th>
+                    <th>承認日時</th>
                     <th>詳細</th>
                 </tr>
             </thead>
@@ -84,25 +90,11 @@
                 <tr>
                     <td>承認済み</td>
                     <td>{{ $request->user->name }}</td>
-                    <td>
-                        @if($request->attendance)
-                            {{ $request->attendance->formatted_date }}
-                        @else
-                            -
-                        @endif
-                    </td>
+                    <td>{{ \Carbon\Carbon::parse($request->attendance->date)->format('Y/m/d') }}</td>
                     <td class="reason-cell">{{ $request->note }}</td>
+                    <td>{{ \Carbon\Carbon::parse($request->approved_at)->format('Y/m/d') }}</td>
                     <td>
-                        @if($request->created_at)
-                            {{ $request->created_at instanceof \Carbon\Carbon 
-                                ? $request->created_at->format('Y/m/d') 
-                                : date('Y/m/d', strtotime($request->created_at)) }}
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td>
-                       <a href="{{ route('admin.correction-requests.show', $request->id) }}" class="detail-btn">詳細</a>
+                       <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-btn">詳細</a>
                     </td>
                 </tr>
                 @empty

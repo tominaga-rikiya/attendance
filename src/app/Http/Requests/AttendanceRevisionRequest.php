@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Attendance;
-use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
-
 
 class AttendanceRevisionRequest extends FormRequest
 {
@@ -16,7 +13,7 @@ class AttendanceRevisionRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check();
+        return true;
     }
 
     /**
@@ -26,132 +23,85 @@ class AttendanceRevisionRequest extends FormRequest
      */
     public function rules()
     {
-        // リクエストのアクションタイプを取得
-        $action = $this->route()->getActionMethod();
-
-        // アクションによって異なるルールを返す
-        switch ($action) {
-            case 'clockIn':
-                return $this->getClockInRules();
-            case 'clockOut':
-                return $this->getClockOutRules();
-            case 'breakStart':
-                return $this->getBreakStartRules();
-            case 'breakEnd':
-                return $this->getBreakEndRules();
-            default:
-                return [];
-        }
+        return [
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i',
+            'breaks.*.start_time' => 'nullable|date_format:H:i',
+            'breaks.*.end_time' => 'nullable|date_format:H:i',
+            'note' => 'required|string',
+        ];
     }
 
     /**
-     * 出勤時のバリデーションルール
-     */
-    private function getClockInRules()
-    {
-        return [];
-    }
-
-    /**
-     * 退勤時のバリデーションルール
-     */
-    private function getClockOutRules()
-    {
-        return [];
-    }
-
-    /**
-     * 休憩開始時のバリデーションルール
-     */
-    private function getBreakStartRules()
-    {
-        return [];
-    }
-
-    /**
-     * 休憩終了時のバリデーションルール
-     */
-    private function getBreakEndRules()
-    {
-        return [];
-    }
-
-    /**
-     * バリデーションが完了した後の処理
+     * カスタムバリデーションルールを追加
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
      */
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $action = $this->route()->getActionMethod();
-            $user = auth()->user();
-            $today = Carbon::now()->toDateString();
-            $attendance = Attendance::where('user_id', $user->id)
-                ->where('date', $today)
-                ->first();
+            // 出勤時間が退勤時間より後になっているかチェック
+            if ($this->filled(['start_time', 'end_time']) && $this->start_time > $this->end_time) {
+                $validator->errors()->add('time_error', '出勤時間もしくは退勤時間が不適切な値です');
+            }
 
-            switch ($action) {
-                case 'clockIn':
-                    $this->validateClockIn($validator, $attendance);
-                    break;
-                case 'clockOut':
-                    $this->validateClockOut($validator, $attendance);
-                    break;
-                case 'breakStart':
-                    $this->validateBreakStart($validator, $attendance);
-                    break;
-                case 'breakEnd':
-                    $this->validateBreakEnd($validator, $attendance);
-                    break;
+            // 休憩時間をループでチェック
+            if (isset($this->breaks) && is_array($this->breaks)) {
+                foreach ($this->breaks as $index => $break) {
+                    // 空の休憩時間はスキップ
+                    if (empty($break['start_time']) && empty($break['end_time'])) {
+                        continue;
+                    }
+
+                    // 休憩時間の前後どちらかしかない場合のチェック
+                    if ((empty($break['start_time']) && !empty($break['end_time'])) ||
+                        (!empty($break['start_time']) && empty($break['end_time']))
+                    ) {
+                        $validator->errors()->add('break_pair_error', '休憩開始時間と休憩終了時間は両方入力してください');
+                        continue;
+                    }
+
+                    // 休憩時間が勤務時間内に収まっているかチェック
+                    if (!empty($break['start_time']) && !empty($break['end_time'])) {
+                        // 出勤・退勤時間が正しく入力されている場合のみチェック
+                        if ($this->filled(['start_time', 'end_time']) && $this->start_time <= $this->end_time) {
+                            // 休憩開始時間が出勤時間より前、または退勤時間より後の場合
+                            if ($break['start_time'] < $this->start_time || $break['start_time'] > $this->end_time) {
+                                $validator->errors()->add('break_out_of_range', '休憩時間が勤務時間外です');
+                            }
+
+                            // 休憩終了時間が出勤時間より前、または退勤時間より後の場合
+                            if ($break['end_time'] < $this->start_time || $break['end_time'] > $this->end_time) {
+                                $validator->errors()->add('break_out_of_range', '休憩時間が勤務時間外です');
+                            }
+                        }
+
+                        // 休憩開始時間と休憩終了時間の整合性チェック
+                        if ($break['start_time'] > $break['end_time']) {
+                            $validator->errors()->add('break_time_error', '休憩時間が勤務時間外です');
+                        }
+                    }
+                }
             }
         });
     }
 
     /**
-     * 出勤時の追加バリデーション
+     * バリデーションエラーメッセージのカスタマイズ
+     *
+     * @return array
      */
-    private function validateClockIn($validator, $attendance)
+    public function messages()
     {
-        // 既に出勤済みの場合はエラー
-        if ($attendance && $attendance->start_time) {
-            $validator->errors()->add('start_time', '既に出勤済みです');
-        }
-    }
-
-    /**
-     * 退勤時の追加バリデーション
-     */
-    private function validateClockOut($validator, $attendance)
-    {
-        // 出勤していない場合はエラー
-        if (!$attendance || $attendance->status !== Attendance::STATUS_WORKING) {
-            $validator->errors()->add('status', '出勤中でないため退勤できません');
-        }
-
-        // 既に退勤済みの場合はエラー
-        if ($attendance && $attendance->end_time) {
-            $validator->errors()->add('end_time', '既に退勤済みです');
-        }
-    }
-
-    /**
-     * 休憩開始時の追加バリデーション
-     */
-    private function validateBreakStart($validator, $attendance)
-    {
-        // 出勤していない場合はエラー
-        if (!$attendance || $attendance->status !== Attendance::STATUS_WORKING) {
-            $validator->errors()->add('status', '出勤中でないため休憩に入れません');
-        }
-    }
-
-    /**
-     * 休憩終了時の追加バリデーション
-     */
-    private function validateBreakEnd($validator, $attendance)
-    {
-        // 休憩中でない場合はエラー
-        if (!$attendance || $attendance->status !== Attendance::STATUS_ON_BREAK) {
-            $validator->errors()->add('status', '休憩中でないため復帰できません');
-        }
+        return [
+            'note.required' => '備考を記入してください',
+            'start_time.required' => '出勤時間を入力してください',
+            'end_time.required' => '退勤時間を入力してください',
+            'start_time.date_format' => '出勤時間の形式が正しくありません',
+            'end_time.date_format' => '退勤時間の形式が正しくありません',
+            'breaks.*.start_time.date_format' => '休憩時間が勤務時間外です。',
+            'breaks.*.end_time.date_format' => '休憩時間が勤務時間外です。',
+        ];
     }
 }
