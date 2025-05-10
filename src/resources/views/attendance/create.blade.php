@@ -27,24 +27,20 @@
         @endif
     </div>
 
-    <!-- 日付表示 -->
     <div class="date-display">
         {{ \Carbon\Carbon::now()->format('Y年n月j日') . '(' . ['日', '月', '火', '水', '木', '金', '土'][\Carbon\Carbon::now()->dayOfWeek] . ')' }}
     </div>
 
-    <!-- 時間表示 -->
     <div class="time-display">
         {{ \Carbon\Carbon::now()->format('H:i') }}
     </div>
 
-    <!-- 退勤済みの場合のみメッセージを表示（時刻表示の下） -->
     @if ($status == "finished")
     <div class="thank-you-message">
         お疲れ様でした。
     </div>
     @endif
 
-    <!-- アクションボタン -->
     <div class="action-buttons">
         @if ($status == 'not_started')
             <form action="{{ route('attendance.clock-in') }}" method="POST">

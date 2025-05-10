@@ -4,7 +4,6 @@ body {
     font-weight: bold;
 }
 
-/* コンテナ */
 .container {
     width: 95%;
     max-width: 1100px;
@@ -12,7 +11,6 @@ body {
     padding: 10px;
 }
 
-/* タイトル */
 .date-navigation {
     display: flex;
     justify-content: space-between;
@@ -22,24 +20,16 @@ body {
 }
 
 .with-vertical-line {
-       border-left: 4px solid #333;
-        padding-left: 10px;
-        margin-left: 0;
-        color: #000000;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        margin-top: 5px;
-}
-
-.date-navigation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-left: 4px solid #333;
+    padding-left: 10px;
+    margin-left: 0;
+    color: #000000;
+    font-size: 24px;
+    font-weight: bold;
     margin-bottom: 15px;
+    margin-top: 5px;
 }
 
-/* 検索カード */
 .search-card {
     background: #fff;
     border: 1px solid #e0e0e0;
@@ -69,7 +59,6 @@ body {
     min-height: 40px;
 }
 
-/* 月選択部分 */
 .date-display {
     display: flex;
     align-items: center;
@@ -122,7 +111,6 @@ body {
     text-decoration: underline;
 }
 
-/* テーブルカード */
 .table-card {
     background: #fff;
     border: 1px solid #e0e0e8;
@@ -140,7 +128,6 @@ body {
     overflow-x: auto;
 }
 
-/* データテーブル */
 .data-table {
     width: 100%;
     table-layout: fixed;
@@ -155,7 +142,6 @@ body {
     border-bottom: 1px solid #e0e0e8;
     font-size: 14px;
     color: #737373;
-  
 }
 
 .data-table th {
@@ -168,12 +154,10 @@ body {
     height: 40px;
 }
 
-/* 最初の行の上枠を追加 */
 .data-table thead tr:first-child th {
     border-top: 1px solid #e0e0e8;
 }
 
-/* 最初のセルと最後のセルの左右の枠線 */
 .data-table th:first-child,
 .data-table td:first-child {
     border-left: 1px solid #e0e0e8;
@@ -184,7 +168,6 @@ body {
     border-right: 1px solid #e0e0e8;
 }
 
-/* テーブルの最初と最後の行の角丸 */
 .data-table thead tr:first-child th:first-child {
     border-top-left-radius: 6px;
 }
@@ -201,7 +184,6 @@ body {
     border-bottom-right-radius: 6px;
 }
 
-/* 選択行と行ホバーのスタイル */
 .selected-row {
     background-color: rgba(33, 150, 243, 0.1);
 }
@@ -210,7 +192,6 @@ body {
     background-color: rgba(240, 240, 245, 0.5);
 }
 
-/* 列の幅設定 */
 .data-table th:nth-child(1),
 .data-table td:nth-child(1) {
     width: 7%;
@@ -242,7 +223,6 @@ body {
     width: 7%;
 }
 
-/* ボタンスタイル */
 .btn-outline {
     display: inline-block;
     padding: 4px 12px;
@@ -263,7 +243,6 @@ body {
     text-align: center;
 }
 
-/* レスポンシブ対応 */
 @media screen and (max-width: 850px) and (min-width: 768px) {
     body {
         padding: 0;
@@ -281,7 +260,6 @@ body {
         width: 100%;
     }
 
-    /* セルの幅を調整 */
     .data-table th:nth-child(1),
     .data-table td:nth-child(1) {
         width: 15%;

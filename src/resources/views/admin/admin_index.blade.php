@@ -10,14 +10,12 @@
     @include('components.admin_header')
     
     <div class="container">
-        <!-- 日付ナビゲーション -->
         <div class="date-navigation">
             <div class="date-title">
                 <h2 class="with-vertical-line">{{ $formattedDate }}の勤怠</h2>
             </div>
         </div>
 
-        <!-- シンプルな日付ナビゲーション -->
         <div class="search-card">
             <div class="search-card-body">
                 <div class="form-group">
@@ -37,7 +35,6 @@
             </div>
         </div>
 
-        <!-- 勤怠一覧テーブル -->
         <div class="table-card">
             <div class="table-container">
                 <table class="data-table">
@@ -94,7 +91,7 @@ body {
     font-weight: bold;
 }
 
-/* コンテナ */
+
 .container {
     width: 95%;
     max-width: 1100px;
@@ -102,7 +99,7 @@ body {
     padding: 10px;
 }
 
-/* タイトル */
+
 .date-navigation {
     display: flex;
     justify-content: space-between;
@@ -122,7 +119,7 @@ body {
     margin-top: 5px;
 }
 
-/* 検索カード */
+
 .search-card {
     background: #fff;
     border: 1px solid #e0e0e0;
@@ -147,7 +144,7 @@ body {
     min-height: 40px;
 }
 
-/* 日付表示 */
+
 .date-display {
     display: flex;
     align-items: center;
@@ -183,7 +180,7 @@ body {
     text-decoration: underline;
 }
 
-/* テーブルカード */
+
 .table-card {
     background: #fff;
     border: 1px solid #e0e0e8;
@@ -201,7 +198,7 @@ body {
     overflow-x: auto;
 }
 
-/* データテーブル */
+
 .data-table {
     width: 100%;
     table-layout: fixed;

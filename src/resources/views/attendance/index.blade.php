@@ -9,14 +9,12 @@
 @section('content')
 @include('components.header')
 <div class="container">
-    <!-- 日付ナビゲーション -->
     <div class="date-navigation">
         <div class="date-title">
             <h2 class="with-vertical-line">勤怠一覧</h2>
         </div>
     </div>
 
-    <!-- 検索フォーム -->
     <div class="search-card">
         <div class="search-card-header"></div>
         <div class="search-card-body">
@@ -40,9 +38,6 @@
         </div>
     </div>
 
-   <!-- resources/views/attendance/index.blade.php -->
-
-<!-- 勤怠一覧テーブル -->
 <div class="table-card">
     <div class="table-container">
         <table class="data-table">
@@ -61,10 +56,7 @@
                     <tr>
                         <td>{{ \Carbon\Carbon::parse($date)->format('Y/m/d') }} ({{ \Carbon\Carbon::parse($date)->isoFormat('ddd') }})</td>
                         @if($attendance)
-                            <!-- 出勤時間は常に表示 -->
                             <td class="text-center">{{ $attendance->time_only_start_time }}</td>
-                            
-                            <!-- 退勤時間はシンプルに表示 -->
                             <td class="text-center">
                                 @if($attendance->end_time)
                                     {{ $attendance->time_only_end_time }}
@@ -72,11 +64,8 @@
                                     
                                 @endif
                             </td>
-                            
-                            <!-- 休憩時間 -->
+                    
                             <td class="text-center">{{ $attendance->formatted_break_time }}</td>
-                            
-                            <!-- 合計時間（退勤済みの場合のみ） -->
                             <td class="text-center">
                                 @if($attendance->status === App\Models\Attendance::STATUS_FINISHED)
                                     {{ $attendance->formatted_work_time }}
@@ -84,8 +73,6 @@
                                     
                                 @endif
                             </td>
-                            
-                            <!-- 詳細ボタン -->
                             <td class="text-center">
                                 <div class="button-group">
                                     <a href="{{ route('attendance.show', $attendance->id) }}" class="btn-outline">

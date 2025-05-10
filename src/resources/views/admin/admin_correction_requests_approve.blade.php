@@ -79,7 +79,6 @@
 
 
     <style>
-        /* 全体のレイアウト */
         .container {
             display: flex;
             flex-direction: column;
@@ -88,7 +87,6 @@
             margin-top: 40px;
         }
 
-        /* タイトル部分 */
         .with-vertical-line {
             border-left: 4px solid #333;
             padding-left: 10px;
@@ -100,7 +98,6 @@
             margin-top: 5px;
         }
 
-        /* テーブルスタイル */
         .attendance-detail-table {
             width: 100%;
             max-width: 900px;
@@ -134,7 +131,6 @@
             font-weight: bold;
         }
 
-        /* 承認ステータス */
         .approval-status {
             width: 100%;
             max-width: 900px;
@@ -148,7 +144,6 @@
             color: #38c172;
         }
 
-        /* 承認ボタン */
         .approve-btn {
             padding: 15px;
             width: 130px;
@@ -165,12 +160,10 @@
             background-color: #333;
         }
 
-        /* 休憩時間表示 */
         .break-time-item {
             margin-bottom: 5px;
         }
         
-        /* ボタンコンテナ */
         .button-container {
             width: 100%;
             max-width: 900px;

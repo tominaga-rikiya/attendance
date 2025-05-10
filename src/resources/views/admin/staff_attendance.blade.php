@@ -10,14 +10,12 @@
     @include('components.admin_header')
     
     <div class="container">
-        <!-- タイトル -->
         <div class="date-navigation">
             <div class="date-title">
                 <h2 class="with-vertical-line">{{ $user->name }}さんの勤怠</h2>
             </div>
         </div>
 
-        <!-- 月次ナビゲーション -->
         <div class="search-card">
             <div class="search-card-body">
                 <form method="GET" action="{{ route('staff.attendance', $user->id) }}" class="search-form">
@@ -40,7 +38,6 @@
             </div>
         </div>
 
-        <!-- 月間勤怠テーブル -->
         <div class="table-card">
             <div class="table-container">
                 <table class="data-table">

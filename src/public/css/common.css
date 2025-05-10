@@ -159,11 +159,6 @@ header {
     margin-top: 8px;
 }
 
-/* .disable {
-    color: #666 !important;
-    background-color: #CCC !important;
-} */
-
 @media (min-width: 768px) and (max-width: 850px) {
     .header__logo {
         width: 25vw;
