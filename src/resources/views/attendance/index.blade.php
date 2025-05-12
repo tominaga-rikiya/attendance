@@ -14,7 +14,6 @@
             <h2 class="with-vertical-line">勤怠一覧</h2>
         </div>
     </div>
-
     <div class="search-card">
         <div class="search-card-header"></div>
         <div class="search-card-body">
