@@ -1,9 +1,25 @@
+body{
+    background-color:#F0EFF2;
+}
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     margin-top: 40px;
+   
+}
+
+.form-container {
+    width: 100%;
+    max-width: 900px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    margin-top: 0;
+    font-weight: bold;
+    background-color: #FFFFFF;
 }
 
 .with-vertical-line {
@@ -22,17 +38,6 @@
     max-width: 900px;
     margin-bottom: 20px;
     text-align: left;
-}
-
-.form-container {
-    width: 100%;
-    max-width: 900px;
-    border: 1px solid #e1e1e1;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    margin-top: 0;
-    font-weight: bold;
 }
 
 .form-group {
@@ -68,7 +73,7 @@
 
 .form-group input {
     width: 300px;
-    border: 1px solid #E1E1E1;
+    border: 1px solid #e1e1e1;
     font-weight: 900;
     text-align: center;
 }
@@ -76,7 +81,7 @@
 .form-group input[name="start_time"],
 .form-group input[name="end_time"],
 .break-time-row input {
-    width: 100px;
+    width: 120px;
 }
 
 .form-group input[name="note"] {
@@ -85,45 +90,51 @@
 }
 
 .readonly-box {
-    margin-left: 0;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-weight: bold;
+}
+
+.time-display {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.value-left,
+.value-right {
+    width: 150px;
+    text-align: left;
+    font-weight: bold;
 }
 
 .time-separator {
-    margin: 0 20px;
-    padding: 0 30px;
-    display: inline-block;
+    width: 150px;
+    text-align: center;
     font-weight: normal;
     font-size: 16px;
 }
 
-.break-times-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+/* 読み取り専用（time-display内）の時間セパレータ */
+.time-display .time-separator {
+    text-align: left;
 }
 
-.break-time-row {
-    position: relative;
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
+form .readonly-box.name-display {
+    padding-left: 30px;
 }
 
-.break-time-row .time-inputs {
-    display: flex;
-    align-items: center;
+form .value-left {
+    padding-left: 30px;
 }
 
-.break-times-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.break-time-item {
-    display: block;
-}
 
 .error-message {
     color: #ff0000;
@@ -164,10 +175,60 @@
     cursor: pointer;
     font-weight: bold;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .btn-submit:hover {
     background-color: #333;
+}
+
+.break-times-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.break-time-row {
+    position: relative;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ====== 管理者専用スタイル ====== */
+.approve-btn {
+    padding: 15px;
+    width: 130px;
+    background-color: #000000;
+    color: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* 承認済みステータス */
+.approval-status {
+    width: 100%;
+    max-width: 900px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.approval-status p {
+    margin: 0;
+    padding: 15px;
+    width: 130px;
+    text-align: center;
+    font-size: 22px;
+    color:#FFFFFF;
+    background-color: #696969;
+    font-weight: 700;
+    border: 2px solid #696969;
+    border-radius: 4px;
 }
 
 @media (min-width: 769px) and (max-width: 850px) {
@@ -181,7 +242,6 @@
 
     .form-group input {
         width: 150px;
-        margin-left: 30px;
     }
 
     .form-group input[name="start_time"],
@@ -200,6 +260,62 @@
 
     .time-separator {
         margin: 0 10px;
-        padding: 0 15px;
     }
 }
+
+
+/* 管理者用 */
+@media (min-width: 768px) and (max-width: 850px) {
+    .container {
+        padding: 15px;
+    }
+
+    .form-container {
+        max-width: 100%;
+        padding: 25px;
+        margin: 0 10px;
+    }
+
+    .with-vertical-line {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+
+    .form-group label {
+        flex: 0 0 160px;
+        font-size: 15px;
+    }
+
+    .form-group .input-wrapper {
+        margin-left: 20px;
+    }
+
+    .value-left,
+    .value-right {
+        width: 120px;
+    }
+
+    .time-separator {
+        width: 100px;
+    }
+
+    .approve-btn,
+    .approval-status p {
+        width: 110px;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .button-container,
+    .approval-status {
+        max-width: 100%;
+    }
+}
+
+
+
+
+
+
+
+

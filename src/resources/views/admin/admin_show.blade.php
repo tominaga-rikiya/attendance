@@ -13,30 +13,38 @@
         <div class="date-title">
             <h2 class="with-vertical-line">勤怠詳細</h2>
         </div>
-        <form id="attendance-form" action="{{ route('admin.attendances.update', $attendance->id) }}" method="POST">
+        
+        <!-- 修正可能フォーム -->
+        <form id="attendance-form" action="{{ route('admin.attendances.update', $attendance->id) }}" method="POST" novalidate>
             @csrf
             <div class="form-container">
                 <div class="form-group">
                     <label>名前</label>
                     <div class="input-wrapper">
-                        <div class="readonly-box">{{ $attendance->user->name }}</div>
+                        <div class="readonly-box name-display">
+                            {{ $attendance->user->name }}
+                        </div>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label>日付</label>
                     <div class="input-wrapper">
-                        <div class="readonly-box">{{ \Carbon\Carbon::parse($attendance->date)->format('Y年 n月j日') }}</div>
+                        <div class="readonly-box time-display">
+                            <span class="value-left">{{ \Carbon\Carbon::parse($attendance->date)->format('Y年') }}</span>
+                            <span class="time-separator"></span>
+                            <span class="value-right">{{ \Carbon\Carbon::parse($attendance->date)->format('n月j日') }}</span>
+                        </div>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label>出勤・退勤</label>
                     <div class="input-wrapper">
                         <div class="time-inputs">
-                            <input type="text" name="start_time" value="{{ old('start_time', \Carbon\Carbon::parse($attendance->start_time)->format('H:i')) }}" required>
+                            <input type="text" name="start_time" value="{{ old('start_time', \Carbon\Carbon::parse($attendance->start_time)->format('H:i')) }}" >
                             <span class="time-separator">～</span>
-                            <input type="text" name="end_time" value="{{ $attendance->status == 'finished' && $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : old('end_time', '') }}" required>
+                            <input type="text" name="end_time" value="{{ old('end_time', $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : '') }}" >
                         </div>
                         @if($errors->has('time_error'))
                             <div class="error-message">{{ $errors->first('time_error') }}</div>
@@ -50,51 +58,99 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label>休憩</label>
-                    <div class="input-wrapper">
-                        <div class="break-times-container">
-                            @foreach($attendance->breakTimes as $i => $break)
+                <!-- 既存の休憩時間を表示 -->
+                @foreach($attendance->breakTimes as $index => $break)
+                    <div class="form-group">
+                        <label>{{ $index == 0 ? '休憩' : '休憩' . ($index + 1) }}</label>
+                        <div class="input-wrapper">
+                            <div class="break-times-container">
                                 <div class="break-time-row">
                                     <div class="time-inputs">
-                                        <input type="text" name="breaks[{{ $i }}][start_time]" value="{{ old("breaks.{$i}.start_time", $break->start_time ? \Carbon\Carbon::parse($break->start_time)->format('H:i') : '') }}">
+                                        <input type="text" name="breaks[{{ $index }}][start_time]" 
+                                               value="{{ old("breaks.{$index}.start_time", $break->start_time ? \Carbon\Carbon::parse($break->start_time)->format('H:i') : '') }}">
                                         <span class="time-separator">～</span>
-                                        <input type="text" name="breaks[{{ $i }}][end_time]" value="{{ old("breaks.{$i}.end_time", $break->end_time ? \Carbon\Carbon::parse($break->end_time)->format('H:i') : '') }}">
+                                        <input type="text" name="breaks[{{ $index }}][end_time]" 
+                                               value="{{ old("breaks.{$index}.end_time", $break->end_time ? \Carbon\Carbon::parse($break->end_time)->format('H:i') : '') }}">
                                     </div>
-                                    @if($errors->has("breaks.{$i}.start_time") || $errors->has("breaks.{$i}.end_time"))
-                                        <div class="error-message">
-                                            @if($errors->has("breaks.{$i}.start_time"))
-                                                {{ $errors->first("breaks.{$i}.start_time") }}
-                                            @elseif($errors->has("breaks.{$i}.end_time"))
-                                                {{ $errors->first("breaks.{$i}.end_time") }}
-                                            @endif
-                                        </div>
-                                    @endif
                                 </div>
-                            @endforeach
+                            </div>
+                            @if($errors->has("breaks.{$index}.start_time"))
+                                <div class="error-message">{{ $errors->first("breaks.{$index}.start_time") }}</div>
+                            @endif
+                            @if($errors->has("breaks.{$index}.end_time"))
+                                <div class="error-message">{{ $errors->first("breaks.{$index}.end_time") }}</div>
+                            @endif
+                            <!-- 追加：一般的な休憩エラーメッセージ -->
+                            @if($errors->has('break_time_error'))
+                                <div class="error-message">{{ $errors->first('break_time_error') }}</div>
+                            @endif
+                            @if($errors->has('break_pair_error'))
+                                <div class="error-message">{{ $errors->first('break_pair_error') }}</div>
+                            @endif
+                            @if($errors->has('break_out_of_range'))
+                                <div class="error-message">{{ $errors->first('break_out_of_range') }}</div>
+                            @endif
+                            @if($errors->has('break_overlap_error'))
+                                <div class="error-message">{{ $errors->first('break_overlap_error') }}</div>
+                            @endif
                         </div>
+                    </div>
+                @endforeach
+
+                <!-- 新規追加用の休憩フィールド -->
+                @php
+                    $newBreakIndex = $attendance->breakTimes->count();
+                    $newBreakLabel = $newBreakIndex == 0 ? '休憩' : '休憩' . ($newBreakIndex + 1);
+                @endphp
+                <div class="form-group">
+                    <label>{{ $newBreakLabel }}</label>
+                    <div class="input-wrapper">
+                        <div class="break-times-container">
+                            <div class="break-time-row">
+                                <div class="time-inputs">
+                                    <input type="text" name="breaks[{{ $newBreakIndex }}][start_time]" 
+                                           value="{{ old("breaks.{$newBreakIndex}.start_time", '') }}">
+                                    <span class="time-separator">～</span>
+                                    <input type="text" name="breaks[{{ $newBreakIndex }}][end_time]" 
+                                           value="{{ old("breaks.{$newBreakIndex}.end_time", '') }}">
+                                </div>
+                            </div>
+                        </div>
+                        @if($errors->has("breaks.{$newBreakIndex}.start_time"))
+                            <div class="error-message">{{ $errors->first("breaks.{$newBreakIndex}.start_time") }}</div>
+                        @endif
+                        @if($errors->has("breaks.{$newBreakIndex}.end_time"))
+                            <div class="error-message">{{ $errors->first("breaks.{$newBreakIndex}.end_time") }}</div>
+                        @endif
+                        <!-- 追加：一般的な休憩エラーメッセージ -->
+                        @if($errors->has('break_time_error'))
+                            <div class="error-message">{{ $errors->first('break_time_error') }}</div>
+                        @endif
+                        @if($errors->has('break_pair_error'))
+                            <div class="error-message">{{ $errors->first('break_pair_error') }}</div>
+                        @endif
                         @if($errors->has('break_out_of_range'))
                             <div class="error-message">{{ $errors->first('break_out_of_range') }}</div>
-                        @elseif($errors->has('break_pair_error'))
-                            <div class="error-message">{{ $errors->first('break_pair_error') }}</div>
-                        @elseif($errors->has('break_time_error'))
-                            <div class="error-message">{{ $errors->first('break_time_error') }}</div>
+                        @endif
+                        @if($errors->has('break_overlap_error'))
+                            <div class="error-message">{{ $errors->first('break_overlap_error') }}</div>
                         @endif
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label>備考</label>
                     <div class="input-wrapper">
-                        <input type="text" name="note" value="{{ old('note', $attendance->note ?? '') }}">
+                        <input type="text" name="note" value="{{ old('note', '') }}">
                         @error('note')
                             <div class="error-message">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-            </div>
-            <div class="button-container" style="margin-top: 20px;">
-                <button type="submit" class="btn-submit">修正</button>
+                
+                <div class="button-container" style="margin-top: 20px;">
+                    <button type="submit" class="btn-submit">修正</button>
+                </div>
             </div>
         </form>
     </div>

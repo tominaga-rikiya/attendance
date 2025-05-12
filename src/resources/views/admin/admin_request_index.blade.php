@@ -47,9 +47,7 @@
                     <td class="reason-cell">{{ $request->note }}</td>
                     <td>
                         @if($request->created_at)
-                            {{ $request->created_at instanceof \Carbon\Carbon 
-                                ? $request->created_at->format('Y/m/d') 
-                                : date('Y/m/d', strtotime($request->created_at)) }}
+                            {{ \Carbon\Carbon::parse($request->created_at)->format('Y/m/d') }}
                         @else
                             -
                         @endif
@@ -94,15 +92,13 @@
                     <td class="reason-cell">{{ $request->note }}</td>
                     <td>
                         @if($request->created_at)
-                            {{ $request->created_at instanceof \Carbon\Carbon 
-                                ? $request->created_at->format('Y/m/d') 
-                                : date('Y/m/d', strtotime($request->created_at)) }}
+                            {{ \Carbon\Carbon::parse($request->created_at)->format('Y/m/d') }}
                         @else
                             -
                         @endif
                     </td>
                     <td>
-                       <a href="{{ route('admin.correction-requests.show', $request->id) }}" class="detail-btn">詳細</a>
+                        <a href="{{ route('admin.correction-requests.show', $request->id) }}" class="detail-btn">詳細</a>
                     </td>
                 </tr>
                 @empty
@@ -117,7 +113,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // タブ切り替え機能
         const tabLinks = document.querySelectorAll('.tab-link');
         const tabContents = document.querySelectorAll('.tab-content');
         
@@ -125,11 +120,9 @@
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                // アクティブクラスを全て削除
                 tabLinks.forEach(lnk => lnk.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
                 
-                // クリックされたタブをアクティブに
                 this.classList.add('active');
                 const tabId = this.getAttribute('data-tab');
                 document.getElementById(tabId + '-content').classList.add('active');

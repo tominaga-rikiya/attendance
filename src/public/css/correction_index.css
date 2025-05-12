@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
 }
 
 .with-vertical-line {
@@ -11,17 +11,10 @@
     padding-left: 10px;
     margin-left: 0;
     color: #000000;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 15px;
     margin-top: 5px;
-}
-
-.date-navigation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
 }
 
 body {
@@ -36,11 +29,10 @@ body {
     padding: 10px;
 }
 
-
 .tab-header {
     display: flex;
     margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #000000;
 }
 
 .tab-link {
@@ -49,13 +41,14 @@ body {
     font-size: 16px;
     margin: 0 10px;
     transition: all 0.3s ease;
-    font-weight:400;
+    font-weight: 400;
 }
 
 .tab-link.active {
-    font-weight: bold;
-    color: #000; 
-    padding-bottom: 8px; 
+    font-weight: 700;
+    color: #000;
+    padding-bottom: 8px;
+}
 
 .tab-content {
     display: none;
@@ -70,18 +63,17 @@ body {
     border-collapse: collapse;
     margin-bottom: 20px;
     background-color: #fff;
-    border-radius: 10px; 
-    overflow: hidden; 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
-
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
 
 .list-table th {
-    background-color: #f8f8f8; 
     font-weight: normal;
     color: #737373;
     padding: 10px;
     text-align: center;
-    border-bottom: 1px solid #eee; 
+    border-bottom: 3px solid #eee;
     border-top: none;
     border-left: none;
     border-right: none;
@@ -92,19 +84,17 @@ body {
     padding: 15px 10px;
     text-align: center;
     color: #737373;
-    border-bottom: 1px solid #eee; 
+    border-bottom: 3px solid #eee;
     border-top: none;
     border-left: none;
     border-right: none;
 }
-
 
 .no-data {
     text-align: center;
     color: #888;
     padding: 20px;
 }
-
 
 .detail-btn {
     display: inline-block;
@@ -113,7 +103,6 @@ body {
     text-decoration: none;
     font-weight: bold;
 }
-
 
 .approve-btn {
     background-color: #4CAF50;

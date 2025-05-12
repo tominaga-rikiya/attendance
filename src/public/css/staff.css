@@ -1,0 +1,126 @@
+.date-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.with-vertical-line {
+    border-left: 5px solid #000000;
+    padding-left: 10px;
+    margin-left: 20px;
+    color: #000000;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+body {
+    background-color: #F0F0F5;
+    font-weight: bold;
+}
+
+.container {
+    width: 95%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.content-wrapper {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.alert {
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.list-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 0;
+    background-color: #fff;
+    table-layout: fixed;
+}
+
+.list-table th {
+    background-color: #fff;
+    font-weight: normal;
+    color: #737373;
+    padding: 12px 20px;
+    text-align: center;
+    border-bottom: 3px solid #f0f0f0;
+    font-weight: 500;
+}
+
+
+.list-table td {
+    padding: 5px;
+    text-align: center;
+    color: #737373;
+    border-bottom: 3px solid #f0f0f0;
+}
+
+.list-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.detail-btn {
+    display: inline-block;
+    color: #000000;
+    padding: 8px 30px;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 3px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.detail-btn:hover {
+    background-color: #555;
+    color: white;
+    text-decoration: none;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .content-wrapper {
+        padding: 0;
+    }
+
+    .list-table th,
+    .list-table td {
+        padding: 10px 8px;
+        font-size: 0.9rem;
+    }
+
+    .list-table td:first-child,
+    .list-table th:first-child {
+        padding-left: 20px;
+    }
+
+    .detail-btn {
+        padding: 6px 18px;
+        font-size: 0.85rem;
+    }
+}
