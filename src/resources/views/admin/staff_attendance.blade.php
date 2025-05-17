@@ -103,33 +103,4 @@
             </a>
         </div>
     </div>
-
-    <style>
-        .button-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-        
-        .btn-success {
-            padding: 10px 20px;
-            background-color: #000000;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-success:hover {
-            background-color: #218838;
-            text-decoration: none;
-            color: white;
-        }
-    </style>    
 @endsection

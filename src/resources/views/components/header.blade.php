@@ -6,9 +6,9 @@
         <nav class="header__nav">
             <ul>
                 @if(auth()->user())
-                     <li><a href="/attendance">勤怠</a></li>
-                     <li><a href="/attendances">勤怠一覧</a></li>
-                    <li><a href="/correction-requests">申請</a></li>
+                    <li><a href="{{ route('attendance.create') }}">勤怠</a></li>
+                    <li><a href="{{ route('attendance.index') }}">勤怠一覧</a></li>
+                    <li><a href="{{ route('attendance.correction_index') }}">申請</a></li>
                     <li>
                         <form action="{{ route('logout') }}" method="post">
                             @csrf

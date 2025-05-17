@@ -6,9 +6,8 @@
         <nav class="header__nav">
             <ul>
                 @if(auth()->user())
-                     <li><a href="/attendances">今月の勤怠一覧</a></li>
-                    <li><a href="/correction-requests">申請一覧</a></li>
-                    <li>
+                    <li><a href="{{ route('attendance.index') }}">今月の勤怠一覧</a></li>
+                    <li><a href="{{ route('attendance.correction_index') }}">申請一覧</a></li>                    <li>
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
                             <button type="submit" class="header__logout">ログアウト</button>

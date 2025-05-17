@@ -240,7 +240,7 @@
                         </div>
                     </div>
                     
-                    <div class="button-container" style="margin-top: 20px;">
+                    <div class="button-container">
                         <button type="submit" class="btn-submit">修正</button>
                     </div>
                 </div>
