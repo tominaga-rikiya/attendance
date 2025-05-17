@@ -30,7 +30,6 @@ class AttendanceRevisionRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            // 出勤・退勤時間の整合性チェック
             if ($this->filled(['start_time', 'end_time']) && $this->start_time > $this->end_time) {
                 $validator->errors()->add('time_error', '出勤時間もしくは退勤時間が不適切な値です');
             }
@@ -39,12 +38,10 @@ class AttendanceRevisionRequest extends FormRequest
                 $validBreaks = [];
 
                 foreach ($this->breaks as $index => $break) {
-                    // 空の場合はスキップ
                     if (empty($break['start_time']) && empty($break['end_time'])) {
                         continue;
                     }
 
-                    // ペアチェック
                     if ((empty($break['start_time']) && !empty($break['end_time'])) ||
                         (!empty($break['start_time']) && empty($break['end_time']))
                     ) {
@@ -53,13 +50,11 @@ class AttendanceRevisionRequest extends FormRequest
                     }
 
                     if (!empty($break['start_time']) && !empty($break['end_time'])) {
-                        // 時間順序チェック
                         if ($break['start_time'] > $break['end_time']) {
                             $validator->errors()->add('break_time_error', '休憩時間が不適切な値です');
                             continue;
                         }
 
-                        // 勤務時間内チェック
                         if ($this->filled(['start_time', 'end_time']) && $this->start_time <= $this->end_time) {
                             if (
                                 $break['start_time'] < $this->start_time || $break['start_time'] > $this->end_time ||
