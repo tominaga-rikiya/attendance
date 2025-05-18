@@ -49,47 +49,41 @@ Route::controller(AuthController::class)->group(function () {
 // 認証済み・メール確認済みユーザー用ルート（一般ユーザー）
 Route::middleware(['auth', 'verified'])->group(function () {
     // 勤怠記録
-    Route::get('/attendance', [AttendanceController::class, 'create'])->name('attendance.create');
+    Route::get('/attendance', [AttendanceController::class, 'userAttendanceForm'])->name('attendance.create');
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clock-in');
     Route::post('/attendance/break-start', [AttendanceController::class, 'breakStart'])->name('attendance.break-start');
     Route::post('/attendance/break-end', [AttendanceController::class, 'breakEnd'])->name('attendance.break-end');
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clock-out');
 
     // 勤怠一覧・詳細
-    Route::get('/attendances', [AttendanceController::class, 'index'])->name('attendance.index');
-    Route::get('/attendances/{id}', [AttendanceController::class, 'show'])->name('attendance.show');
-    Route::post('/attendances/{id}', [AttendanceController::class, 'update'])->name('attendance.update');
+    Route::get('/attendances', [AttendanceController::class, 'userIndex'])->name('attendance.index');
+    Route::get('/attendances/{id}', [AttendanceController::class, 'userShow'])->name('attendance.show');
+    Route::post('/attendances/{id}', [AttendanceController::class, 'userUpdate'])->name('attendance.update');
 
     // 修正申請
-    Route::get('/correction-requests', [AttendanceController::class, 'correctionIndex'])->name('attendance.correction_index');
-    Route::get('/correction-requests/{id}', [AttendanceController::class, 'correctionShow'])->name('attendance.correction.show');
-    Route::post('/correction-requests/{id}/approve', [AttendanceController::class, 'approve'])->name('attendance.correction.approve');
+    Route::get('/correction-requests', [AttendanceController::class, 'userCorrectionIndex'])->name('attendance.correction_index');
 });
 
 // 管理者専用ルート
 Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
     // 修正申請関連のルート
-Route::get('/correction-requests', [AdminAttendanceController::class, 'indexCorrectionRequests'])
-    ->name('admin.correction-requests.index');
+    Route::get('/correction-requests', [AdminAttendanceController::class, 'adminCorrectionIndex'])
+        ->name('admin.correction-requests.index');
 
-    // 詳細表示用ルート
-    Route::get('/correction-requests/{id}', [AdminAttendanceController::class, 'showCorrectionRequest'])
+    // 修正申請承認画面
+    Route::get('/correction-requests/{id}', [AdminAttendanceController::class, 'adminCorrectionShow'])
         ->name('admin.correction-requests.show');
-        
-        // 修正申請承認画面
-    Route::get('/correction-requests/{id}/approve', [AdminAttendanceController::class, 'showApproveCorrectionRequest'])
-        ->name('admin.correction-requests.approve');
 
-        // 修正申請承認の処理
-     Route::post('/correction-requests/{id}/approve', [AdminAttendanceController::class, 'approveCorrectionRequest'])
+    // 修正申請承認の処理
+    Route::post('/correction-requests/{id}/approve', [AdminAttendanceController::class, 'adminCorrectionApprove'])
         ->name('admin.correction-requests.approve.post');
 
     // 勤怠管理
-    Route::get('/attendances', [AdminAttendanceController::class, 'index'])
+    Route::get('/attendances', [AdminAttendanceController::class, 'adminIndex'])
         ->name('admin.attendances.index');
-    Route::get('/attendances/{id}', [AdminAttendanceController::class, 'show'])
+    Route::get('/attendances/{id}', [AdminAttendanceController::class, 'adminShow'])
         ->name('admin.attendances.show');
-    Route::post('/attendances/{id}', [AdminAttendanceController::class, 'update'])
+    Route::post('/attendances/{id}', [AdminAttendanceController::class, 'adminUpdate'])
         ->name('admin.attendances.update');
 
     // スタッフ管理

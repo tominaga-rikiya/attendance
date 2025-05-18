@@ -36,9 +36,7 @@ class AttendanceClockOutTest extends TestCase
         ]);
     }
 
-    /**
-     * 退勤ボタンが正しく機能するかテスト
-     */
+    //退勤ボタンが正しく機能するかテスト
     public function test_clock_out_button_works_correctly()
     {
         // 退勤ボタンが表示されることを確認
@@ -59,15 +57,12 @@ class AttendanceClockOutTest extends TestCase
         $updatedAttendance = Attendance::find($this->attendance->id);
         $this->assertNotNull($updatedAttendance->end_time);
 
-        // 画面表示が変わっていることを確認
         $afterResponse = $this->get('/attendance');
         $afterResponse->assertSee('退勤済'); 
         $afterResponse->assertSee('お疲れ様でした');
     }
 
-    /**
-     * 退勤時刻が管理画面で確認できることをテスト
-     */
+    //退勤時刻が管理画面で確認できることをテスト
     public function test_clock_out_time_can_be_confirmed_in_admin_panel()
     {
         // 管理者ユーザーを作成
@@ -97,9 +92,8 @@ class AttendanceClockOutTest extends TestCase
         // 管理画面にアクセス
         $response = $this->get('/admin/attendances');
 
-        // 管理画面で確認
         $response->assertStatus(200); 
-        $response->assertSee('test_user');
+        $response->assertSee('admin user');
         $response->assertSee('11:23'); 
     }
 }

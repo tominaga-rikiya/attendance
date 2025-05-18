@@ -26,9 +26,7 @@ class AttendanceClockInTest extends TestCase
         $this->actingAs($this->user);
     }
 
-    /**
-     * 出勤ボタンが正しく機能するかテスト
-     */
+    //出勤ボタンが正しく機能するかテスト
     public function test_clock_in_button_works_correctly()
     {
         //画面に出勤ボタンが表示されていることを確認する
@@ -40,16 +38,14 @@ class AttendanceClockInTest extends TestCase
         $clockInResponse = $this->post('/attendance/clock-in');
         $clockInResponse->assertRedirect('/attendance');
 
-        // 処理後の画面表示確認
         $afterResponse = $this->get('/attendance');
         $afterResponse->assertSee('出勤中');      
-        $afterResponse->assertDontSee('出勤');    
+        $afterResponse->assertDontSee('勤務外');    
         $afterResponse->assertSee('退勤');        
     }
 
-    /**
-     * 出勤は一日一回のみできることをテスト
-     */
+    
+    //出勤は一日一回のみできることをテスト
     public function test_can_clock_in_only_once_per_day()
     {
         //ステータスが退勤済であるユーザーにログインする
@@ -67,9 +63,8 @@ class AttendanceClockInTest extends TestCase
         $response->assertSee('退勤済');      
     }
 
-    /**
-     * 出勤時刻が管理画面で確認できることをテスト
-     */
+    
+    //出勤時刻が管理画面で確認できることをテスト
     public function test_clock_in_time_can_be_confirmed_in_admin_panel()
     {
         // テスト時間を固定
@@ -86,7 +81,6 @@ class AttendanceClockInTest extends TestCase
         ]);
         $this->actingAs($admin);
 
-        // 管理画面にアクセス
         $response = $this->get('/admin/attendances');
 
         // 管理画面に出勤時刻が正確に記録されていることを確認

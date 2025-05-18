@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
 {
-    // テスト実行後にデータベースをリセット
     use RefreshDatabase;
 
     protected function setUp(): void
@@ -17,10 +15,8 @@ class RegisterTest extends TestCase
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
     }
 
-    /**
-     * 名前が未入力の場合のバリデーションテスト
-     *
-     */
+    
+    //名前が未入力の場合、バリデーションテスト
     public function test_name_is_required()
     {
         $response = $this->post('/register', [
@@ -36,10 +32,7 @@ class RegisterTest extends TestCase
         $this->assertEquals('お名前を入力してください', session('errors')->first('name'));
     }
 
-    /**
-     * メールアドレスが未入力の場合のバリデーションテスト
-     *
-     */
+    //メールアドレスが未入力の場合のバリデーションテスト
     public function test_email_is_required()
     {
         $response = $this->post('/register', [
@@ -55,10 +48,7 @@ class RegisterTest extends TestCase
         $this->assertEquals('メールアドレスを入力してください', session('errors')->first('email'));
     }
 
-    /**
-     * パスワードが8文字未満の場合のバリデーションテスト
-     *
-     */
+    //パスワードが8文字未満の場合のバリデーションテスト
     public function test_password_minimum_length()
     {
         $response = $this->post('/register', [
@@ -76,10 +66,7 @@ class RegisterTest extends TestCase
         $this->assertEquals('パスワードは8文字以上で入力してください', session('errors')->first('password'));
     }
 
-    /**
-     * パスワードが一致しない場合のバリデーションテスト
-     *
-     */
+    //パスワードが一致しない場合のバリデーションテスト
     public function test_password_confirmation_must_match()
     {
         $response = $this->post('/register', [
@@ -98,10 +85,7 @@ class RegisterTest extends TestCase
     }
     
 
-    /**
-     * パスワードが未入力の場合のバリデーションテスト
-     *
-     */
+    //パスワードが未入力の場合のバリデーションテスト
     public function test_password_is_required()
     {
         $response = $this->post('/register', [
@@ -117,10 +101,7 @@ class RegisterTest extends TestCase
         $this->assertEquals('パスワードを入力してください', session('errors')->first('password'));
     }
 
-    /**
-     * 全てのフォームが正しく入力された場合のテスト
-     *
-     */
+    //全てのフォームが正しく入力された場合のテスト
     public function test_user_can_register_with_valid_data()
     {
         $response = $this->post('/register', [

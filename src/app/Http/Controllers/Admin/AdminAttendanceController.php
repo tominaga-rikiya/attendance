@@ -16,7 +16,7 @@ class AdminAttendanceController extends Controller
     /**
      * 勤怠一覧表示
      */
-    public function index(Request $request)
+    public function adminIndex(Request $request)
     {
         $searchDate = $request->input('date', Carbon::now()->toDateString());
         $searchUserId = $request->input('user_id');
@@ -46,7 +46,7 @@ class AdminAttendanceController extends Controller
     /**
      * 勤怠詳細表示
      */
-    public function show($id)
+    public function adminShow($id)
     {
         $attendance = Attendance::with('user', 'breakTimes')
             ->findOrFail($id);
@@ -57,7 +57,7 @@ class AdminAttendanceController extends Controller
     /**
      * 勤怠情報の更新
      */
-    public function update(AttendanceRevisionRequest $request, $id)
+    public function adminUpdate(AttendanceRevisionRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
 
@@ -105,7 +105,7 @@ class AdminAttendanceController extends Controller
     /**
      * 修正申請一覧
      */
-    public function indexCorrectionRequests()
+    public function adminCorrectionIndex()
     {
         $pendingRequests = RevisionRequest::where('revision_requests.status', 'pending')
             ->with(['attendance', 'user'])
@@ -129,7 +129,7 @@ class AdminAttendanceController extends Controller
     /**
      * 修正申請詳細
      */
-    public function showCorrectionRequest($id)
+    public function adminCorrectionShow($id)
     {
         $revisionRequest = RevisionRequest::findOrFail($id);
         $attendance = $revisionRequest->attendance;
@@ -138,7 +138,7 @@ class AdminAttendanceController extends Controller
         return view('admin.admin_correction_requests_approve', compact('revisionRequest', 'attendance', 'pendingRevision'));
     }
 
-    public function approveCorrectionRequest($id)
+    public function adminCorrectionApprove($id)
     {
         DB::beginTransaction();
 
