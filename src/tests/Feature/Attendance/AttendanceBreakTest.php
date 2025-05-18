@@ -36,9 +36,8 @@ class AttendanceBreakTest extends TestCase
         ]);
     }
 
-    /**
-     * 休憩ボタンが正しく機能するかテスト
-     */
+    
+    //休憩ボタンが正しく機能するかテスト
     public function test_break_start_button_works_correctly()
     {
         //画面に休憩入ボタンが表示されていることを確認する
@@ -50,15 +49,12 @@ class AttendanceBreakTest extends TestCase
         $breakStartResponse = $this->post('/attendance/break-start');
         $breakStartResponse->assertRedirect('/attendance');
 
-        // 処理後の状態確認
         $afterResponse = $this->get('/attendance');
         $afterResponse->assertSee('休憩中');
         $afterResponse->assertSee('休憩戻');
     }
 
-    /**
-     * 休憩は一日に何回でもできることを確認するテスト
-     */
+    //休憩は一日に何回でもできることを確認するテスト
     public function test_can_take_multiple_breaks_per_day()
     {
 
@@ -77,9 +73,8 @@ class AttendanceBreakTest extends TestCase
         $response->assertSee('休憩中');
     }
 
-    /**
-     * 休憩戻ボタンが正しく機能するかテスト
-     */
+    
+    //休憩戻ボタンが正しく機能するかテスト
     public function test_break_end_button_works_correctly()
     {
         //休憩入の処理を行う
@@ -90,17 +85,13 @@ class AttendanceBreakTest extends TestCase
         $breakResponse->assertSee('休憩中');
         $breakResponse->assertSee('休憩戻');
 
-        //休憩戻の処理を行う
         $this->post('/attendance/break-end');
-
-        // 処理後の状態確認
         $afterResponse = $this->get('/attendance');
         $afterResponse->assertSee('出勤中');
     }
 
-    /**
-     * 休憩戻は一日に何回でもできることを確認するテスト
-     */
+    
+    //休憩戻は一日に何回でもできることを確認するテスト
     public function test_can_end_multiple_breaks_per_day()
     {
         //休憩入と休憩戻の処理を行い、再度休憩入の処理を行う
@@ -114,9 +105,7 @@ class AttendanceBreakTest extends TestCase
         $response->assertSee('休憩戻');
     }
 
-    /**
-     * 休憩時刻が勤怠一覧画面で確認できることを確認するテスト
-     */
+    //休憩時刻が勤怠一覧画面で確認できることを確認するテスト
     public function test_break_times_can_be_confirmed_in_attendance_list()
     {
         //休憩入と休憩戻の処理を行う

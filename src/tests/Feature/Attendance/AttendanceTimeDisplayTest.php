@@ -25,9 +25,7 @@ class AttendanceTimeDisplayTest extends TestCase
         $this->actingAs($this->user);
     }
 
-    /**
-     * 現在の日時情報がUIと同じ形式で表示されるかテスト
-     */
+    //現在の日時情報がUIと同じ形式で表示されるかテスト
     public function test_current_date_time_is_displayed()
     {
         // 勤怠打刻画面を開く
@@ -36,7 +34,7 @@ class AttendanceTimeDisplayTest extends TestCase
         // 現在の日付と時刻
         $now = Carbon::now();
 
-        // 日付と時刻が表示されているか確認（年、月、日、時刻のみチェック）
+        // 日付と時刻が表示されているか確認
         $response->assertSee($now->format('Y年'), false);
         $response->assertSee($now->format('月'), false);
         $response->assertSee($now->format('日'), false);

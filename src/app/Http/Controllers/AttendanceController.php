@@ -15,7 +15,7 @@ class AttendanceController extends Controller
     /**
      * 勤怠画面表示
      */
-    public function create()
+    public function userAttendanceForm()
     {
         $user = auth()->user();
         $today = Carbon::now()->toDateString();
@@ -98,7 +98,7 @@ class AttendanceController extends Controller
     {
         $user = auth()->user();
         $today = Carbon::now()->toDateString();
-        
+
         $now = Carbon::now()->format('Y-m-d H:i:00');
         $now = Carbon::parse($now);
 
@@ -129,7 +129,7 @@ class AttendanceController extends Controller
     {
         $user = auth()->user();
         $today = Carbon::now()->toDateString();
-       
+
         $now = Carbon::now()->format('Y-m-d H:i:00');
         $now = Carbon::parse($now);
 
@@ -147,7 +147,7 @@ class AttendanceController extends Controller
     /**
      * 勤怠一覧表示
      */
-    public function index(Request $request)
+    public function userIndex(Request $request)
     {
         $user = auth()->user();
         $searchMonth = $request->input('month', date('Y-m'));
@@ -196,7 +196,7 @@ class AttendanceController extends Controller
     /**
      * 勤怠詳細表示
      */
-    public function show($id)
+    public function userShow($id)
     {
         $attendance = Attendance::with('breakTimes')
             ->where('user_id', auth()->id())
@@ -209,7 +209,7 @@ class AttendanceController extends Controller
         return view('attendance.show', compact('attendance', 'pendingRevision'));
     }
 
-    public function update(AttendanceRevisionRequest $request, $id)
+    public function userUpdate(AttendanceRevisionRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
 
@@ -253,15 +253,15 @@ class AttendanceController extends Controller
         return redirect()->route('attendance.show', $id)->with('success', '修正リクエストを送信しました');
     }
 
-   
+
     /**
      * 勤怠修正申請一覧表示
      */
-    public function correctionIndex()
+    public function userCorrectionIndex()
     {
         // 自分が行った申請のうち、管理者が承認していないもの
         $pendingRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())
-            ->where('revision_requests.status', 'pending')  
+            ->where('revision_requests.status', 'pending')
             ->with(['attendance', 'user'])
             ->join('attendances', 'revision_requests.attendance_id', '=', 'attendances.id')
             ->orderBy('attendances.date', 'asc')
@@ -269,8 +269,8 @@ class AttendanceController extends Controller
             ->get();
 
         // 自分が行った申請のうち、承認済みのもの
-        $approvedRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())  
-            ->where('revision_requests.status', 'approved')  
+        $approvedRequests = RevisionRequest::where('revision_requests.user_id', auth()->id())
+            ->where('revision_requests.status', 'approved')
             ->with(['attendance', 'user'])
             ->join('attendances', 'revision_requests.attendance_id', '=', 'attendances.id')
             ->orderBy('attendances.date', 'asc')
@@ -278,19 +278,5 @@ class AttendanceController extends Controller
             ->get();
 
         return view('attendance.correction_index', compact('pendingRequests', 'approvedRequests'));
-    }
-
-    /**
-     * 勤怠修正申請詳細表示
-     */
-    public function correctionShow($id)
-    {
-        $revision = RevisionRequest::with(['attendance', 'user'])->findOrFail($id);
-
-        if ($revision->user_id != auth()->id() && !auth()->user()->isAdmin()) {
-            return redirect()->route('attendance.correction')->with('error', '権限がありません');
-        }
-
-        return view('attendance.correction_show', compact('revision'));
     }
 }

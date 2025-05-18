@@ -27,22 +27,16 @@ class AttendanceStatusTest extends TestCase
         $this->actingAs($this->user);
     }
 
-    /**
-     * 勤務外の場合、勤怠ステータスが正しく表示されるテスト
-     */
+    //勤務外の場合、勤怠ステータスが正しく表示されるテスト
     public function test_status_shows_correctly_when_not_working()
     {
-        //勤怠打刻画面を開く
         $response = $this->get('/attendance');
-
-        //画面に表示されているステータスを確認する
         $response->assertSee('勤務外'); 
         $response->assertSee('出勤');  
     }
 
-    /**
-     * 出勤中の場合、勤怠ステータスが正しく表示されるテスト
-     */
+    
+    //出勤中の場合、勤怠ステータスが正しく表示されるテスト
     public function test_status_shows_correctly_when_clocked_in()
     {
         // ステータスが出勤中のユーザーにログインする
@@ -53,18 +47,13 @@ class AttendanceStatusTest extends TestCase
             'status' => Attendance::STATUS_WORKING,
         ]);
 
-        //勤怠打刻画面を開く
         $response = $this->get('/attendance');
-
-        //画面に表示されているステータスを確認する
         $response->assertSee('出勤中'); 
         $response->assertSee('休憩入'); 
         $response->assertSee('退勤');  
     }
 
-    /**
-     * 休憩中の場合、勤怠ステータスが正しく表示されるテスト
-     */
+    //休憩中の場合、勤怠ステータスが正しく表示されるテスト
     public function test_status_shows_correctly_when_on_break()
     {
         //ステータスが休憩中のユーザーにログインする
@@ -82,17 +71,12 @@ class AttendanceStatusTest extends TestCase
             'end_time' => null
         ]);
 
-        //勤怠打刻画面を開く
         $response = $this->get('/attendance');
-
-        //画面に表示されているステータスを確認する
         $response->assertSee('休憩中'); 
         $response->assertSee('休憩戻');
     }
 
-    /**
-     * 退勤済の場合、勤怠ステータスが正しく表示されるテスト
-     */
+    //退勤済の場合、勤怠ステータスが正しく表示されるテスト
     public function test_status_shows_correctly_when_clocked_out()
     {
         //ステータスが退勤済のユーザーにログインする
@@ -104,10 +88,7 @@ class AttendanceStatusTest extends TestCase
             'status' => Attendance::STATUS_FINISHED,
         ]);
 
-        //勤怠打刻画面を開く
         $response = $this->get('/attendance');
-
-        //画面に表示されているステータスを確認する
         $response->assertSee('退勤済');       
         $response->assertSee('お疲れ様でした'); 
         $response->assertDontSee('出勤');  

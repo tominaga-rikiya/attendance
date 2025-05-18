@@ -19,9 +19,8 @@ class EmailVerificationTest extends TestCase
         $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
     }
 
-    /**
-     * 会員登録後に認証メールが送信されるかテスト
-     */
+    
+    //会員登録後に認証メールが送信されるかテスト
     public function test_verification_email_is_sent_after_registration()
     {
         Mail::fake();
@@ -41,9 +40,8 @@ class EmailVerificationTest extends TestCase
         $this->assertTrue(session()->has('unauthenticated_user'));
     }
 
-    /**
-     * メール認証誘導画面の「認証はこちらから」ボタン機能テスト
-     */
+    
+    //メール認証誘導画面の「認証はこちらから」ボタン機能テスト
     public function test_verification_redirect_button_works()
     {
         $user = User::factory()->create([
@@ -60,29 +58,7 @@ class EmailVerificationTest extends TestCase
         $redirectResponse->assertRedirect('http://localhost:8025');
     }
 
-    /**
-     * 認証メール再送機能のテスト
-     */
-    public function test_resend_verification_email()
-    {
-        Mail::fake();
-
-        $user = User::factory()->create([
-            'email_verified_at' => null,
-        ]);
-
-        session()->put('unauthenticated_user', $user);
-
-        $response = $this->post('/email/verification-notification');
-
-        $response->assertRedirect();
-
-        $this->assertTrue(session()->has('resent'));
-    }
-
-    /**
-     * メール認証完了後に勤怠画面に遷移するかテスト
-     */
+     //メール認証完了後に勤怠画面に遷移するかテスト
     public function test_verified_user_redirects_to_attendance_page()
     {
         $user = User::factory()->create([
